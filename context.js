@@ -2,6 +2,7 @@
 
 var assert      = require('assert');
 var wrapEmitter = require('emitter-listener');
+var util = require('util');
 
 /*
  *
@@ -12,7 +13,9 @@ var CONTEXTS_SYMBOL = 'cls@contexts';
 var ERROR_SYMBOL = 'error@context';
 
 // load polyfill if native support is unavailable
-if (!process.addAsyncListener) require('async-listener');
+if (!process.addAsyncListener) {
+  require('async-listener');
+}
 
 function Namespace(name) {
   this.name   = name;
@@ -90,12 +93,15 @@ Namespace.prototype.bind = function (fn, context) {
 Namespace.prototype.enter = function (context) {
   assert.ok(context, "context must be provided for entering");
 
+  debug2('ENTER context: ' + util.inspect(context));
   this._set.push(this.active);
   this.active = context;
 };
 
 Namespace.prototype.exit = function (context) {
   assert.ok(context, "context must be provided for exiting");
+
+  debug2('EXIT context: ' + util.inspect(context));
 
   // Fast path for most exits that are at the top of the stack
   if (this.active === context) {
@@ -165,10 +171,28 @@ function create(name) {
 
   var namespace = new Namespace(name);
   namespace.id = process.addAsyncListener({
-    create : function () { return namespace.active; },
-    before : function (context, storage) { if (storage) namespace.enter(storage); },
-    after  : function (context, storage) { if (storage) namespace.exit(storage); },
-    error  : function (storage) { if (storage) namespace.exit(storage); }
+    create : function () {
+      debug2('INIT ns:' + name + ' id:' + namespace.id.uid + ' active:' + util.inspect(namespace.active, true));
+      return namespace.active;
+    },
+    before : function (context, storage) {
+      if (storage) {
+        debug2('PRE ns:' + name + ' id:' + namespace.id.uid + ' active:' + util.inspect(namespace.active, true));
+        namespace.enter(storage);
+      }
+    },
+    after  : function (context, storage) {
+      if (storage) {
+        debug2('POST ns:' + name + ' id:' + namespace.id.uid  + ' active:' + util.inspect(namespace.active, true));
+        namespace.exit(storage);
+      }
+    },
+    error  : function (storage) {
+      if (storage){
+        debug2('ERROR ns:' + name + ' id:' + namespace.id.uid  + ' active:' + util.inspect(namespace.active, true));
+        namespace.exit(storage);
+      }
+    }
   });
 
   process.namespaces[name] = namespace;
@@ -195,6 +219,12 @@ function reset() {
   process.namespaces = Object.create(null);
 }
 if (!process.namespaces) reset(); // call immediately to set up
+
+function debug2(msg) {
+  if (process.env.DEBUG) {
+    process._rawDebug(msg);
+  }
+}
 
 module.exports = {
   getNamespace     : get,
