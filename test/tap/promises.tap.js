@@ -1,14 +1,13 @@
 'use strict';
 
-var tap             = require('tap')
-  , test            = tap.test
-  , createNamespace = require('../../index.js').createNamespace
-  ;
+const tap = require('tap');
+const test = tap.test;
+const createNamespace = require('../../index.js').createNamespace;
 
 test("continuation-local state with promises", function (t) {
   t.plan(4);
 
-  var namespace = createNamespace('namespace');
+  const namespace = createNamespace('namespace');
   namespace.run(function () {
     namespace.set('test', 0xabad1dea);
 
@@ -21,16 +20,13 @@ test("continuation-local state with promises", function (t) {
 
         Promise.resolve()
           .then(function () {
-            t.equal(namespace.get('test'), 31337,
-                    "mutated state has persisted to first continuation");
+            t.equal(namespace.get('test'), 31337, "mutated state has persisted to first continuation");
           })
           .then(function () {
-            t.equal(namespace.get('test'), 31337,
-                    "mutated state has persisted to second continuation");
+            t.equal(namespace.get('test'), 31337, "mutated state has persisted to second continuation");
           })
           .then(function () {
-            t.equal(namespace.get('test'), 31337,
-                    "mutated state has persisted to third continuation");
+            t.equal(namespace.get('test'), 31337, "mutated state has persisted to third continuation");
             t.end();
           });
       });
@@ -45,18 +41,15 @@ test("continuation-local state with promises", function (t) {
 
         Promise.resolve()
           .then(function () {
-            t.equal(namespace.get('test'), 999,
-                    "mutated state has persisted to first continuation");
+            t.equal(namespace.get('test'), 999, "mutated state has persisted to first continuation");
             return Promise.resolve();
           })
           .then(function () {
-            t.equal(namespace.get('test'), 999,
-                    "mutated state has persisted to second continuation");
+            t.equal(namespace.get('test'), 999, "mutated state has persisted to second continuation");
             return Promise.resolve();
           })
           .then(function () {
-            t.equal(namespace.get('test'), 999,
-                    "mutated state has persisted to third continuation");
+            t.equal(namespace.get('test'), 999, "mutated state has persisted to third continuation");
             t.end();
           });
       });
@@ -71,18 +64,15 @@ test("continuation-local state with promises", function (t) {
 
         Promise.resolve()
           .then(function () {
-            t.equal(namespace.get('test'), 54321,
-              "mutated state has persisted to first continuation");
+            t.equal(namespace.get('test'), 54321, "mutated state has persisted to first continuation");
 
             Promise.resolve()
               .then(function () {
-                t.equal(namespace.get('test'), 54321,
-                  "mutated state has persisted to second continuation");
+                t.equal(namespace.get('test'), 54321, "mutated state has persisted to second continuation");
 
                 Promise.resolve()
                   .then(function () {
-                    t.equal(namespace.get('test'), 54321,
-                      "mutated state has persisted to third continuation");
+                    t.equal(namespace.get('test'), 54321, "mutated state has persisted to third continuation");
                     t.end();
                   });
               });
@@ -97,22 +87,19 @@ test("continuation-local state with promises", function (t) {
         namespace.set('test', 10101);
         t.equal(namespace.get('test'), 10101, "state has been mutated");
 
-        var promise = Promise.resolve();
+        const promise = Promise.resolve();
 
         promise
           .then(function () {
-            t.equal(namespace.get('test'), 10101,
-              "mutated state has persisted to first continuation");
+            t.equal(namespace.get('test'), 10101, "mutated state has persisted to first continuation");
           });
         promise
           .then(function () {
-            t.equal(namespace.get('test'), 10101,
-              "mutated state has persisted to second continuation");
+            t.equal(namespace.get('test'), 10101, "mutated state has persisted to second continuation");
           });
         promise
           .then(function () {
-            t.equal(namespace.get('test'), 10101,
-              "mutated state has persisted to third continuation");
+            t.equal(namespace.get('test'), 10101, "mutated state has persisted to third continuation");
             t.end();
           });
       });

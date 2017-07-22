@@ -319,7 +319,8 @@ function createNamespace(name) {
           const indentStr = ' '.repeat(namespace._indent < 0 ? 0 : namespace._indent);
           debug2(`${indentStr}INIT [${type}] (${name}) asyncId:${asyncId} currentUid:${currentUid} triggerId:${triggerId} active:${util.inspect(namespace.active, {showHidden:true, depth:2, colors:true})} resource:${resource}`);
         }
-      }else if(currentUid === 0){
+
+      } else if(currentUid === 0) {
         // CurrentId will be 0 when triggered from C++. Promise events
         // https://github.com/nodejs/node/blob/master/doc/api/async_hooks.md#triggerid
         const triggerId = async_hooks.triggerAsyncId();
@@ -334,10 +335,14 @@ function createNamespace(name) {
           const indentStr = ' '.repeat(namespace._indent < 0 ? 0 : namespace._indent);
           debug2(`${indentStr}INIT MISSING CONTEXT [${type}] (${name}) asyncId:${asyncId} currentUid:${currentUid} triggerId:${triggerId} active:${util.inspect(namespace.active, { showHidden: true, depth: 2, colors: true })} resource:${resource}`);
         }
+
+      }else if (DEBUG_CLS_HOOKED) {
+        const indentStr = ' '.repeat(namespace._indent < 0 ? 0 : namespace._indent);
+        debug2(`${indentStr}INIT CASE THREE -NO [${type}] (${name}) asyncId:${asyncId} currentUid:${currentUid} triggerId:${triggerId} active:${util.inspect(namespace.active, { showHidden: true, depth: 2, colors: true })} resource:${resource}`);
+
       }
 
-
-      if(DEBUG_CLS_HOOKED && type === 'PROMISE'){
+      if (DEBUG_CLS_HOOKED && type === 'PROMISE') {
         debug2(util.inspect(resource, {showHidden: true}));
         const parentId = resource.parentId;
         const indentStr = ' '.repeat(namespace._indent < 0 ? 0 : namespace._indent);
@@ -349,19 +354,17 @@ function createNamespace(name) {
       currentUid = async_hooks.executionAsyncId();
       let context;
 
-      /*
       if(currentUid === 0){
         // CurrentId will be 0 when triggered from C++. Promise events
         // https://github.com/nodejs/node/blob/master/doc/api/async_hooks.md#triggerid
-        //const triggerId = async_hooks.triggerAsyncId();
-        context = namespace._contexts.get(asyncId); // || namespace._contexts.get(triggerId);
+        const triggerId = async_hooks.triggerAsyncId();
+        context = namespace._contexts.get(asyncId) || namespace._contexts.get(triggerId);
       }else{
         context = namespace._contexts.get(currentUid);
       }
-      */
 
       //HACK to work with promises until they are fixed in node > 8.1.1
-      context = namespace._contexts.get(asyncId) || namespace._contexts.get(currentUid);
+      //context = namespace._contexts.get(asyncId) || namespace._contexts.get(currentUid);
 
       if (context) {
         if (DEBUG_CLS_HOOKED) {
@@ -383,18 +386,18 @@ function createNamespace(name) {
     after(asyncId) {
       currentUid = async_hooks.executionAsyncId();
       let context; // = namespace._contexts.get(currentUid);
-      /*
+
       if(currentUid === 0){
         // CurrentId will be 0 when triggered from C++. Promise events
         // https://github.com/nodejs/node/blob/master/doc/api/async_hooks.md#triggerid
-        //const triggerId = async_hooks.triggerAsyncId();
-        context = namespace._contexts.get(asyncId); // || namespace._contexts.get(triggerId);
+        const triggerId = async_hooks.triggerAsyncId();
+        context = namespace._contexts.get(asyncId) || namespace._contexts.get(triggerId);
       }else{
         context = namespace._contexts.get(currentUid);
       }
-      */
+
       //HACK to work with promises until they are fixed in node > 8.1.1
-      context = namespace._contexts.get(asyncId) || namespace._contexts.get(currentUid);
+      //context = namespace._contexts.get(asyncId) || namespace._contexts.get(currentUid);
 
       if (context) {
         if (DEBUG_CLS_HOOKED) {
