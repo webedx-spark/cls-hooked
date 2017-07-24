@@ -449,7 +449,11 @@ function createNamespace(name) {
         })} context:${util.inspect(namespace._contexts.get(currentExecAsyncId))}`);
       }
 
+<<<<<<< HEAD
+      namespace._contexts.delete(asyncId);
+=======
       namespace._contexts.delete(currentExecAsyncId);
+>>>>>>> refactoring debug statements - WIP
     }
   });
 
