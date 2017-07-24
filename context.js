@@ -388,17 +388,18 @@ function createNamespace(name) {
         namespace.enter(context);
 
         if (DEBUG_CLS_HOOKED) {
-          debug1('BEFORE', namespace, type, asyncId, resource, parentId, false );
-          const triggerId = async_hooks.triggerAsyncId();
+          debug1('BEFORE', namespace, type, asyncId, null, null, false );
+          /*const triggerId = async_hooks.triggerAsyncId();
           const indentStr = ' '.repeat(namespace._indent < 0 ? 0 : namespace._indent);
           debug2(`${indentStr}BEFORE (${name}) asyncId:${asyncId} currentExecAsyncId:${currentExecAsyncId} triggerId:${triggerId} active:${util.inspect(namespace.active, { showHidden: true, depth: 2, colors: true })} context:${util.inspect(context)}`);
-          namespace._indent += 2;
+          namespace._indent += 2;*/
         }
 
       } else if (DEBUG_CLS_HOOKED) {
-        const triggerId = async_hooks.triggerAsyncId();
+        debug1('BEFORE MISSING CONTEXT', namespace, type, asyncId, null, null, true );
+        /*const triggerId = async_hooks.triggerAsyncId();
         const indentStr = ' '.repeat(namespace._indent < 0 ? 0 : namespace._indent);
-        debug2(`${indentStr}BEFORE MISSING CONTEXT (${name}) asyncId:${asyncId} currentExecAsyncId:${currentExecAsyncId} triggerId:${triggerId} active:${util.inspect(namespace.active, { showHidden: true, depth: 2, colors: true })} namespace._contexts:${util.inspect(namespace._contexts, { showHidden: true, depth: 2, colors: true })}`);
+        debug2(`${indentStr}BEFORE MISSING CONTEXT (${name}) asyncId:${asyncId} currentExecAsyncId:${currentExecAsyncId} triggerId:${triggerId} active:${util.inspect(namespace.active, { showHidden: true, depth: 2, colors: true })} namespace._contexts:${util.inspect(namespace._contexts, { showHidden: true, depth: 2, colors: true })}`);*/
         namespace._indent += 2;
       }
     },
@@ -420,33 +421,36 @@ function createNamespace(name) {
 
       if (context) {
         if (DEBUG_CLS_HOOKED) {
-          const triggerId = async_hooks.triggerAsyncId();
           namespace._indent -= 2;
+          debug1('AFTER', namespace, type, asyncId, null, null, false );
+          /*const triggerId = async_hooks.triggerAsyncId();
           const indentStr = ' '.repeat(namespace._indent < 0 ? 0 : namespace._indent);
           debug2(`${indentStr}AFTER (${name}) asyncId:${asyncId} currentExecAsyncId:${currentExecAsyncId} triggerId:${triggerId} active:${util.inspect(namespace.active, {
             showHidden: true, depth: 2, colors: true
-          })} context:${util.inspect(context)}`);
+          })} context:${util.inspect(context)}`);*/
         }
 
         namespace.exit(context);
 
       } else if (DEBUG_CLS_HOOKED) {
-        const triggerId = async_hooks.triggerAsyncId();
         namespace._indent -= 2;
+        debug1('AFTER MISSING CONTEXT', namespace, type, asyncId, null, null, true );
+        /*const triggerId = async_hooks.triggerAsyncId();
         const indentStr = ' '.repeat(namespace._indent < 0 ? 0 : namespace._indent);
         debug2(`${indentStr}AFTER MISSING CONTEXT (${name}) asyncId:${asyncId} currentExecAsyncId:${currentExecAsyncId} triggerId:${triggerId} active:${util.inspect(namespace.active, {
           showHidden: true, depth: 2, colors: true
-        })} context:${util.inspect(context)}`);
+        })} context:${util.inspect(context)}`);*/
       }
     },
     destroy(asyncId) {
       currentExecAsyncId = async_hooks.executionAsyncId();
       if (DEBUG_CLS_HOOKED) {
-        const triggerId = async_hooks.triggerAsyncId();
+        debug1('DESTROY', namespace, type, asyncId, null, null, false );
+        /*const triggerId = async_hooks.triggerAsyncId();
         const indentStr = ' '.repeat(namespace._indent < 0 ? 0 : namespace._indent);
         debug2(`${indentStr}DESTROY (${name}) currentExecAsyncId:${currentExecAsyncId} asyncId:${asyncId} triggerId:${triggerId} active:${util.inspect(namespace.active, {
           showHidden: true, depth: 2, colors: true
-        })} context:${util.inspect(namespace._contexts.get(currentExecAsyncId))}`);
+        })} context:${util.inspect(namespace._contexts.get(currentExecAsyncId))}`);*/
       }
 
       namespace._contexts.delete(currentExecAsyncId);
