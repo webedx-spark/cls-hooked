@@ -21,12 +21,31 @@ module.exports = {
   ERROR_SYMBOL: ERROR_SYMBOL
 };
 
+/**
+ *
+ * @param {string} name - Unique name of namespace
+ * @constructor
+ */
 function Namespace(name) {
+  /**
+   * name - Unique name of namespace
+   * @type {string}
+   */
   this.name = name;
   // changed in 2.7: no default context
   this.active = null;
+  /**
+   * _set is used to manage entering and existing namespace context via Run, Bind, etc
+   * @type {Array}
+   * @private
+   */
   this._set = [];
   this.id = null;
+  /**
+   * Used to manage context per AsyncId via async_hooks
+   * @type {Map}
+   * @private
+   */
   this._contexts = new Map();
   this._indent = 0;
 }
@@ -189,25 +208,21 @@ Namespace.prototype.bind = function bindFactory(fn, context) {
 
 Namespace.prototype.enter = function enter(context) {
   assert.ok(context, 'context must be provided for entering');
-  if (DEBUG_CLS_HOOKED) {
-    const executionAsyncId = async_hooks.executionAsyncId();
-    const triggerAsyncId = async_hooks.triggerAsyncId();
-    const indentStr = ' '.repeat(this._indent < 0 ? 0 : this._indent);
-    debug2(`${indentStr}CONTEXT-ENTER: (${this.name}) currentExecAsyncId:${currentExecAsyncId} executionAsyncId:${executionAsyncId} triggerId:${triggerAsyncId} len:${this._set.length} ${util.inspect(context)}`);
-  }
-
   this._set.push(this.active);
   this.active = context;
+
+  if (DEBUG_CLS_HOOKED) {
+    /*const executionAsyncId = async_hooks.executionAsyncId();
+    const triggerAsyncId = async_hooks.triggerAsyncId();
+    const indentStr = ' '.repeat(this._indent < 0 ? 0 : this._indent);
+    debug2(`${indentStr}CONTEXT-ENTER: (${this.name}) currentExecAsyncId:${currentExecAsyncId} executionAsyncId:${executionAsyncId} triggerId:${triggerAsyncId} len:${this._set.length} ${util.inspect(context)}`);*/
+    debugAsync('CONTEXT-ENTER:', this, null, null, null, null, false, `len:${this._set.length}`);
+  }
+
 };
 
 Namespace.prototype.exit = function exit(context) {
   assert.ok(context, 'context must be provided for exiting');
-  if (DEBUG_CLS_HOOKED) {
-    const executionAsyncId = async_hooks.executionAsyncId();
-    const triggerAsyncId = async_hooks.triggerAsyncId();
-    const indentStr = ' '.repeat(this._indent < 0 ? 0 : this._indent);
-    debug2(`${indentStr}CONTEXT-EXIT: (${this.name}) currentExecAsyncId:${currentExecAsyncId} executionAsyncId:${executionAsyncId} triggerId:${triggerAsyncId} len:${this._set.length} ${util.inspect(context)}`);
-  }
 
   // Fast path for most exits that are at the top of the stack
   if (this.active === context) {
@@ -221,13 +236,22 @@ Namespace.prototype.exit = function exit(context) {
 
   if (index < 0) {
     if (DEBUG_CLS_HOOKED) {
-      debug2('??ERROR?? context exiting but not entered - ignoring: ' + util.inspect(context));
+      debug2(`??ERROR?? context exiting but not entered - ignoring: ${util.inspect(context)}`);
     }
     assert.ok(index >= 0, 'context not currently entered; can\'t exit. \n' + util.inspect(this) + '\n' + util.inspect(context));
   } else {
     assert.ok(index, 'can\'t remove top context');
     this._set.splice(index, 1);
   }
+
+  if (DEBUG_CLS_HOOKED) {
+    /*const executionAsyncId = async_hooks.executionAsyncId();
+    const triggerAsyncId = async_hooks.triggerAsyncId();
+    const indentStr = ' '.repeat(this._indent < 0 ? 0 : this._indent);
+    debug2(`${indentStr}CONTEXT-EXIT: (${this.name}) currentExecAsyncId:${currentExecAsyncId} executionAsyncId:${executionAsyncId} triggerId:${triggerAsyncId} len:${this._set.length} ${util.inspect(context)}`);*/
+    debugAsync('CONTEXT-EXIT:', this, null, null, null, null, false, `len:${this._set.length}`);
+  }
+
 };
 
 Namespace.prototype.bindEmitter = function bindEmitter(emitter) {
@@ -323,7 +347,7 @@ function createNamespace(name) {
         namespace._contexts.set(asyncId, namespace.active);
 
         if (DEBUG_CLS_HOOKED) {
-          debug1('INIT', namespace, type, asyncId, parentId, resource, false);
+          debugAsync('INIT', namespace, type, asyncId, resource, parentId, false, `triggerId: ${triggerId}`);
           /*const indentStr = ' '.repeat(namespace._indent < 0 ? 0 : namespace._indent);
           debug2(`${indentStr}INIT [${type}] (${name}) asyncId:${asyncId} currentExecAsyncId:${currentExecAsyncId} triggerId:${triggerId} active:${util.inspect(namespace.active, {
             showHidden: true, depth: 2, colors: true
@@ -338,14 +362,15 @@ function createNamespace(name) {
         if (triggerIdContext) {
           namespace._contexts.set(asyncId, triggerIdContext);
           if (DEBUG_CLS_HOOKED) {
-            debug1('INIT USING CONTEXT FROM TRIGGERID', namespace, type, asyncId, resource, parentId, false );
+            debugAsync('INIT USING CONTEXT FROM TRIGGERID', namespace, type, asyncId, resource, parentId, false, `triggerId: ${triggerId}`);
             /*const indentStr = ' '.repeat(namespace._indent < 0 ? 0 : namespace._indent);
             debug2(`${indentStr}INIT USING CONTEXT FROM TRIGGERID [${type}] (${name}) asyncId:${asyncId} currentExecAsyncId:${currentExecAsyncId} triggerId:${triggerId} active:${util.inspect(namespace.active, {
               showHidden: true, depth: 2, colors: true
             })} resource:${resource}`);*/
           }
         } else if (DEBUG_CLS_HOOKED) {
-          debug1('INIT MISSING CONTEXT', namespace, type, asyncId, parentId, resource, true );
+          // No active Context set so ignore
+          //debugAsync('INIT MISSING CONTEXT', namespace, type, asyncId, parentId, resource, true );
           /*const indentStr = ' '.repeat(namespace._indent < 0 ? 0 : namespace._indent);
           debug2(`${indentStr}INIT MISSING CONTEXT [${type}] (${name}) asyncId:${asyncId} currentExecAsyncId:${currentExecAsyncId} triggerId:${triggerId} active:${util.inspect(namespace.active, {
             showHidden: true, depth: 2, colors: true
@@ -353,18 +378,19 @@ function createNamespace(name) {
         }
 
       } else if (DEBUG_CLS_HOOKED) {
-        debug1('INIT CASE THREE -NO', namespace, type, asyncId, resource, parentId, false );
+        // No active Context set so ignore
+        //debugAsync('INIT CASE THREE -NO', namespace, type, asyncId, resource, parentId, false );
         /*const indentStr = ' '.repeat(namespace._indent < 0 ? 0 : namespace._indent);
         debug2(`${indentStr}INIT CASE THREE -NO [${type}] (${name}) asyncId:${asyncId} currentExecAsyncId:${currentExecAsyncId} triggerId:${triggerId} active:${util.inspect(namespace.active, { showHidden: true, depth: 2, colors: true })} resource:${resource}`);*/
 
       }
 
-      if (DEBUG_CLS_HOOKED && type === 'PROMISE') {
+      /*if (DEBUG_CLS_HOOKED && type === 'PROMISE') {
         //debug2(util.inspect(resource, { showHidden: true }));
-        debug1('INIT RESOURCE-PROMISE', namespace, type, asyncId, resource, parentId, false );
-        /*const indentStr = ' '.repeat(namespace._indent < 0 ? 0 : namespace._indent);
-        debug2(`${indentStr}INIT RESOURCE-PROMISE [${type}] (${name}) parentId:${parentId} asyncId:${asyncId} currentExecAsyncId:${currentExecAsyncId} triggerId:${triggerId} active:${util.inspect(namespace.active, { showHidden: true, depth: 2, colors: true })} resource:${resource}`);*/
-      }
+        debugAsync('INIT RESOURCE-PROMISE', namespace, type, asyncId, resource, parentId, false );
+        /!*const indentStr = ' '.repeat(namespace._indent < 0 ? 0 : namespace._indent);
+        debug2(`${indentStr}INIT RESOURCE-PROMISE [${type}] (${name}) parentId:${parentId} asyncId:${asyncId} currentExecAsyncId:${currentExecAsyncId} triggerId:${triggerId} active:${util.inspect(namespace.active, { showHidden: true, depth: 2, colors: true })} resource:${resource}`);*!/
+      }*/
 
     },
     before(asyncId) {
@@ -385,22 +411,22 @@ function createNamespace(name) {
 
       if (context) {
 
-        namespace.enter(context);
-
         if (DEBUG_CLS_HOOKED) {
-          debug1('BEFORE', namespace, type, asyncId, null, null, false );
+          debugAsync('BEFORE', namespace, null, asyncId, null, null, false );
           /*const triggerId = async_hooks.triggerAsyncId();
           const indentStr = ' '.repeat(namespace._indent < 0 ? 0 : namespace._indent);
-          debug2(`${indentStr}BEFORE (${name}) asyncId:${asyncId} currentExecAsyncId:${currentExecAsyncId} triggerId:${triggerId} active:${util.inspect(namespace.active, { showHidden: true, depth: 2, colors: true })} context:${util.inspect(context)}`);
-          namespace._indent += 2;*/
+          debug2(`${indentStr}BEFORE (${name}) asyncId:${asyncId} currentExecAsyncId:${currentExecAsyncId} triggerId:${triggerId} active:${util.inspect(namespace.active, { showHidden: true, depth: 2, colors: true })} context:${util.inspect(context)}`);          */
+          namespace._indent += 2;
         }
 
+        namespace.enter(context);
+
       } else if (DEBUG_CLS_HOOKED) {
-        debug1('BEFORE MISSING CONTEXT', namespace, type, asyncId, null, null, true );
+        debugAsync('BEFORE MISSING CONTEXT', namespace, null, asyncId, null, null, true );
         /*const triggerId = async_hooks.triggerAsyncId();
         const indentStr = ' '.repeat(namespace._indent < 0 ? 0 : namespace._indent);
         debug2(`${indentStr}BEFORE MISSING CONTEXT (${name}) asyncId:${asyncId} currentExecAsyncId:${currentExecAsyncId} triggerId:${triggerId} active:${util.inspect(namespace.active, { showHidden: true, depth: 2, colors: true })} namespace._contexts:${util.inspect(namespace._contexts, { showHidden: true, depth: 2, colors: true })}`);*/
-        namespace._indent += 2;
+        //namespace._indent += 2;
       }
     },
     after(asyncId) {
@@ -422,7 +448,7 @@ function createNamespace(name) {
       if (context) {
         if (DEBUG_CLS_HOOKED) {
           namespace._indent -= 2;
-          debug1('AFTER', namespace, type, asyncId, null, null, false );
+          debugAsync('AFTER', namespace, null, asyncId, null, null, false );
           /*const triggerId = async_hooks.triggerAsyncId();
           const indentStr = ' '.repeat(namespace._indent < 0 ? 0 : namespace._indent);
           debug2(`${indentStr}AFTER (${name}) asyncId:${asyncId} currentExecAsyncId:${currentExecAsyncId} triggerId:${triggerId} active:${util.inspect(namespace.active, {
@@ -433,8 +459,8 @@ function createNamespace(name) {
         namespace.exit(context);
 
       } else if (DEBUG_CLS_HOOKED) {
-        namespace._indent -= 2;
-        debug1('AFTER MISSING CONTEXT', namespace, type, asyncId, null, null, true );
+        //namespace._indent -= 2;
+        debugAsync('AFTER MISSING CONTEXT', namespace, null, asyncId, null, null, true );
         /*const triggerId = async_hooks.triggerAsyncId();
         const indentStr = ' '.repeat(namespace._indent < 0 ? 0 : namespace._indent);
         debug2(`${indentStr}AFTER MISSING CONTEXT (${name}) asyncId:${asyncId} currentExecAsyncId:${currentExecAsyncId} triggerId:${triggerId} active:${util.inspect(namespace.active, {
@@ -445,7 +471,7 @@ function createNamespace(name) {
     destroy(asyncId) {
       currentExecAsyncId = async_hooks.executionAsyncId();
       if (DEBUG_CLS_HOOKED) {
-        debug1('DESTROY', namespace, type, asyncId, null, null, false );
+        debugAsync('DESTROY', namespace, null, asyncId, null, null, false );
         /*const triggerId = async_hooks.triggerAsyncId();
         const indentStr = ' '.repeat(namespace._indent < 0 ? 0 : namespace._indent);
         debug2(`${indentStr}DESTROY (${name}) currentExecAsyncId:${currentExecAsyncId} asyncId:${asyncId} triggerId:${triggerId} active:${util.inspect(namespace.active, {
@@ -453,6 +479,7 @@ function createNamespace(name) {
         })} context:${util.inspect(namespace._contexts.get(currentExecAsyncId))}`);*/
       }
 
+      namespace._contexts.delete(asyncId);
       namespace._contexts.delete(currentExecAsyncId);
     }
   });
@@ -484,24 +511,16 @@ function reset() {
 
 process.namespaces = {};
 
-function debug1(msg, namespace, type, asyncId, resource = null, parentId, printAllContexts = false){
+function debugAsync(msg, namespace, type, asyncId, resource = null, parentId, printAllContexts = false, ...args){
   if (DEBUG_CLS_HOOKED) {
     //const indentStr = ' '.repeat(namespace._indent < 0 ? 0 : namespace._indent);
     const indentStr = ' '.repeat(namespace._indent || 0);
     const currentExecAsyncId = async_hooks.executionAsyncId();
     const triggerId = async_hooks.triggerAsyncId();
     if(printAllContexts){
-      debug2(`${indentStr}${msg} [${type}] (${namespace.name}) asyncId:${asyncId} currentExecAsyncId:${currentExecAsyncId} triggerId:${triggerId} parentId:${parentId} 
-      active:${util.inspect(namespace.active, { showHidden: true, depth: 2, colors: true })} 
-      resource:${resource} 
-      context:${util.inspect(context)}
-      namespace._contexts:${util.inspect(namespace._contexts, { showHidden: true, depth: 2, colors: true })}`);
+      debug2(`${indentStr}${msg} [${type}] (${namespace.name}) asyncId:${asyncId} currentExecAsyncId:${currentExecAsyncId} triggerId:${triggerId} parentId:${parentId} active:${util.inspect(namespace.active, { showHidden: true, depth: 2, colors: true })} resource:${resource} namespace._contexts:${util.inspect(namespace._contexts, { showHidden: true, depth: 2, colors: true })}`, ...args);
     }else{
-      debug2(`${indentStr}${msg} [${type}] (${namespace.name}) asyncId:${asyncId} currentExecAsyncId:${currentExecAsyncId} triggerId:${triggerId} parentId:${parentId} 
-      active:${util.inspect(namespace.active, { showHidden: true, depth: 2, colors: true })}
-      resource:${resource}
-      context:${util.inspect(context)}`)
-      ;
+      debug2(`${indentStr}${msg} [${type}] (${namespace.name}) asyncId:${asyncId} currentExecAsyncId:${currentExecAsyncId} triggerId:${triggerId} parentId:${parentId} active:${util.inspect(namespace.active, { showHidden: true, depth: 2, colors: true })} resource:${resource}`, ...args);
     }
   }
 }

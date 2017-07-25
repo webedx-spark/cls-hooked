@@ -7,6 +7,10 @@
     </scripts>
     <node-interpreter value="project" />
     <envs>
+<<<<<<< HEAD
+=======
+      <env name="DEBUG" value="" />
+>>>>>>> refactoring debug statements - WIP
       <env name="DEBUG_CLS_HOOKED" value="1" />
     </envs>
     <method />
