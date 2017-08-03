@@ -41,11 +41,11 @@
   },
   "devDependencies": {
     "chai": "^4.1.0",
-    "mocha": "^3.4.2",
-    "sinon": "^2.3.8",
+    "mocha": "^3.5.0",
+    "sinon": "^2.4.1",
     "sinon-chai": "^2.12.0",
     "superagent": "^3.5.2",
-    "tap": "^10.7.0",
+    "tap": "^10.7.1",
     "tap-mocha-reporter": "3.0.6"
   },
   "false": {}

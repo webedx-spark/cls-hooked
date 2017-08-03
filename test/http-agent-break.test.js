@@ -1,6 +1,7 @@
 'use strict';
 
 const chai = require('chai');
+const expect = chai.expect;
 const should = chai.should();
 
 const superagent = require('superagent');
@@ -46,6 +47,33 @@ describe('cls with http Agent', () => {
     });
 
 
+    it('should destroy context pointers in _set', function (){
+      var loadLocalFunc = mapToArray;
+      expect(namespace._set.length).equal(0, '_set cleared of contexts');
+    });
+
+    it('should destroy context pointers in _contexts', function (){
+
+      /**
+       * Converts `map` to its key-value pairs.
+       *
+       * @private
+       * @param {Object} map The map to convert.
+       * @returns {Array} Returns the key-value pairs.
+       */
+      function mapToArray(map) {
+        let index = -1;
+        let result = Array(map.size);
+
+        map.forEach(function(value, key) {
+          result[++index] = [key, value];
+        });
+        return result;
+      }
+
+      expect(namespace._contexts.size).equal(0, '_contexts cleared of contexts');
+    });
+
     function doClsAction(id, cb) {
       namespace.run(function () {
         //var xid = Math.floor(Math.random() * 1000);
@@ -63,6 +91,23 @@ describe('cls with http Agent', () => {
       });
     }
 
+
+    /**
+     * Converts `map` to its key-value pairs.
+     *
+     * @private
+     * @param {Object} map The map to convert.
+     * @returns {Array} Returns the key-value pairs.
+     */
+    function mapToArray(map) {
+      let index = -1;
+      let result = Array(map.size);
+
+      map.forEach(function(value, key) {
+        result[++index] = [key, value];
+      });
+      return result;
+    }
 
     function httpGetRequest(cb) {
 
