@@ -40,9 +40,9 @@
     "semver": "^5.4.1"
   },
   "devDependencies": {
-    "chai": "^4.1.0",
+    "chai": "^4.1.1",
     "mocha": "^3.5.0",
-    "sinon": "^2.4.1",
+    "sinon": "^3.0.0",
     "sinon-chai": "^2.12.0",
     "superagent": "^3.5.2",
     "tap": "^10.7.1",

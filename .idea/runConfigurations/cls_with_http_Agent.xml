@@ -1,7 +1,7 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="cls with http Agent" type="mocha-javascript-test-runner" factoryName="Mocha" nameIsGenerated="true">
-    <node-interpreter>$USER_HOME$/.nvm/versions/node/v8.2.0/bin/node</node-interpreter>
-    <node-options />
+    <node-interpreter>project</node-interpreter>
+    <node-options>--expose-gc</node-options>
     <working-directory>$PROJECT_DIR$</working-directory>
     <pass-parent-env>true</pass-parent-env>
     <envs>
