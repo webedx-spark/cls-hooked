@@ -422,7 +422,7 @@ function reset() {
 
 process.namespaces = {};
 
-let _debugId = 0
+let _debugId = 0; 
 function debugHooked(msg, namespace, type, asyncId, resource = null, parentId, printAllContexts = false, ...args){
   if (DEBUG_CLS_HOOKED) {
     _debugId++;
