@@ -31,14 +31,14 @@ describe('cls with net connection', () => {
 
           testValue1 = namespace.get('test');
 
-          socket.on('data', namespace.bind(() => {
+          socket.on('data', () => {
             testValue2 = namespace.get('test');
             server.close();
             socket.end('GoodBye');
 
             serverDone = true;
             checkDone();
-          }));
+          });
 
         });
 
