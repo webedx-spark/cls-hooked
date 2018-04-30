@@ -11,10 +11,10 @@ const CONTEXTS_SYMBOL = 'cls@contexts';
 const ERROR_SYMBOL = 'error@context';
 
 const DEBUG_CLS_HOOKED = process.env.DEBUG_CLS_HOOKED;
-const getCurrentUid = semver.gte(process.versions.node, '8.2.0') ? async_hooks.executionAsyncId : () => async_hooks.currentId;
+const getExecutionAsyncId = semver.gte(process.versions.node, '8.2.0') ? async_hooks.executionAsyncId : () => async_hooks.currentId;
 
 
-let currentUid = -1;
+let _currentUid = -1;
 
 module.exports = {
   getNamespace: getNamespace,
@@ -43,7 +43,7 @@ Namespace.prototype.set = function set(key, value) {
 
   if (DEBUG_CLS_HOOKED) {
     const indentStr = ' '.repeat(this._indent < 0 ? 0 : this._indent);
-    debug2(indentStr + 'CONTEXT-SET KEY:' + key + '=' + value + ' in ns:' + this.name + ' currentUid:' + currentUid + ' active:' + util.inspect(this.active, {showHidden:true, depth:2, colors:true}));
+    debug2(indentStr + 'CONTEXT-SET KEY:' + key + '=' + value + ' in ns:' + this.name + ' currentUid:' + _currentUid + ' active:' + util.inspect(this.active, {showHidden:true, depth:2, colors:true}));
   }
 
   return value;
@@ -52,20 +52,19 @@ Namespace.prototype.set = function set(key, value) {
 Namespace.prototype.get = function get(key) {
   if (!this.active) {
     if (DEBUG_CLS_HOOKED) {
-      const asyncHooksCurrentId = getCurrentUid();
+      const executionAsyncId = getExecutionAsyncId();
       const triggerId = async_hooks.triggerAsyncId();
       const indentStr = ' '.repeat(this._indent < 0 ? 0 : this._indent);
       //debug2(indentStr + 'CONTEXT-GETTING KEY NO ACTIVE NS:' + key + '=undefined' + ' (' + this.name + ') currentUid:' + currentUid + ' active:' + util.inspect(this.active, {showHidden:true, depth:2, colors:true}));
-      debug2(`${indentStr}CONTEXT-GETTING KEY NO ACTIVE NS: (${this.name}) ${key}=undefined currentUid:${currentUid} triggerId:${triggerId} asyncHooksCurrentId:${asyncHooksCurrentId} len:${this._set.length}`);
+      debug2(`${indentStr}CONTEXT-GETTING KEY NO ACTIVE NS: (${this.name}) key:${key} currentUid:${_currentUid} executionAsyncId:${executionAsyncId} triggerId:${triggerId} len:${this._set.length} active:${util.inspect(this.active)}`);
     }
-    return undefined;
+    return void 0;
   }
   if (DEBUG_CLS_HOOKED) {
-    const asyncHooksCurrentId = getCurrentUid();
+    const executionAsyncId = getExecutionAsyncId();
     const triggerId = async_hooks.triggerAsyncId();
     const indentStr = ' '.repeat(this._indent < 0 ? 0 : this._indent);
-    debug2(indentStr + 'CONTEXT-GETTING KEY:' + key + '=' + this.active[key] + ' (' + this.name + ') currentUid:' + currentUid + ' active:' + util.inspect(this.active, {showHidden:true, depth:2, colors:true}));
-    debug2(`${indentStr}CONTEXT-GETTING KEY: (${this.name}) ${key}=${this.active[key]} currentUid:${currentUid} triggerId:${triggerId} asyncHooksCurrentId:${asyncHooksCurrentId} len:${this._set.length} active:${util.inspect(this.active)}`);
+    debug2(`${indentStr}CONTEXT-GETTING KEY: (${this.name}) key:${key} ${key}=${this.active[key]} currentUid:${_currentUid} executionAsyncId:${executionAsyncId} triggerId:${triggerId} len:${this._set.length} active:${util.inspect(this.active, {showHidden:true, depth:2, colors:true})}`);
   }
   return this.active[key];
 };
@@ -74,13 +73,13 @@ Namespace.prototype.createContext = function createContext() {
   // Prototype inherit existing context if created a new child context within existing context.
   let context = Object.create(this.active ? this.active : Object.prototype);
   context._ns_name = this.name;
-  context.id = currentUid;
+  context.id = _currentUid;
 
   if (DEBUG_CLS_HOOKED) {
-    const asyncHooksCurrentId = getCurrentUid();
+    const executionAsyncId = getExecutionAsyncId();
     const triggerId = async_hooks.triggerAsyncId();
     const indentStr = ' '.repeat(this._indent < 0 ? 0 : this._indent);
-    debug2(`${indentStr}CONTEXT-CREATED Context: (${this.name}) currentUid:${currentUid} triggerId:${triggerId} asyncHooksCurrentId:${asyncHooksCurrentId} len:${this._set.length} context:${util.inspect(context, {showHidden:true, depth:2, colors:true})}`);
+    debug2(`${indentStr}CONTEXT-CREATED Context: (${this.name}) currentUid:${_currentUid} executionAsyncId:${executionAsyncId} triggerId:${triggerId} len:${this._set.length} context:${util.inspect(context, {showHidden:true, depth:2, colors:true})}`);
   }
 
   return context;
@@ -93,9 +92,9 @@ Namespace.prototype.run = function run(fn) {
   try {
     if (DEBUG_CLS_HOOKED) {
       const triggerId = async_hooks.triggerAsyncId();
-      const asyncHooksCurrentId = getCurrentUid();
+      const executionAsyncId = getExecutionAsyncId();
       const indentStr = ' '.repeat(this._indent < 0 ? 0 : this._indent);
-      debug2(`${indentStr}CONTEXT-RUN BEGIN: (${this.name}) currentUid:${currentUid} triggerId:${triggerId} asyncHooksCurrentId:${asyncHooksCurrentId} len:${this._set.length} context:${util.inspect(context)}`);
+      debug2(`${indentStr}CONTEXT-RUN BEGIN: (${this.name}) currentUid:${_currentUid} executionAsyncId:${executionAsyncId} triggerId:${triggerId} len:${this._set.length} context:${util.inspect(context)}`);
     }
     fn(context);
     return context;
@@ -107,9 +106,9 @@ Namespace.prototype.run = function run(fn) {
   } finally {
     if (DEBUG_CLS_HOOKED) {
       const triggerId = async_hooks.triggerAsyncId();
-      const asyncHooksCurrentId = getCurrentUid();
+      const executionAsyncId = getExecutionAsyncId();
       const indentStr = ' '.repeat(this._indent < 0 ? 0 : this._indent);
-      debug2(`${indentStr}CONTEXT-RUN END: (${this.name}) currentUid:${currentUid} triggerId:${triggerId} asyncHooksCurrentId:${asyncHooksCurrentId} len:${this._set.length} ${util.inspect(context)}`);
+      debug2(`${indentStr}CONTEXT-RUN END: (${this.name}) currentUid:${_currentUid} executionAsyncId:${executionAsyncId} triggerId:${triggerId} len:${this._set.length} ${util.inspect(context)}`);
     }
     this.exit(context);
   }
@@ -138,13 +137,13 @@ Namespace.prototype.runPromise = function runPromise(fn) {
   }
 
   if (DEBUG_CLS_HOOKED) {
-    debug2('CONTEXT-runPromise BEFORE: (' + this.name + ') currentUid:' + currentUid + ' len:' + this._set.length + ' ' + util.inspect(context));
+    debug2('CONTEXT-runPromise BEFORE: (' + this.name + ') currentUid:' + _currentUid + ' len:' + this._set.length + ' ' + util.inspect(context));
   }
 
   return promise
     .then(result => {
       if (DEBUG_CLS_HOOKED) {
-        debug2('CONTEXT-runPromise AFTER then: (' + this.name + ') currentUid:' + currentUid + ' len:' + this._set.length + ' ' + util.inspect(context));
+        debug2('CONTEXT-runPromise AFTER then: (' + this.name + ') currentUid:' + _currentUid + ' len:' + this._set.length + ' ' + util.inspect(context));
       }
       this.exit(context);
       return result;
@@ -152,7 +151,7 @@ Namespace.prototype.runPromise = function runPromise(fn) {
     .catch(err => {
       err[ERROR_SYMBOL] = context;
       if (DEBUG_CLS_HOOKED) {
-        debug2('CONTEXT-runPromise AFTER catch: (' + this.name + ') currentUid:' + currentUid + ' len:' + this._set.length + ' ' + util.inspect(context));
+        debug2('CONTEXT-runPromise AFTER catch: (' + this.name + ') currentUid:' + _currentUid + ' len:' + this._set.length + ' ' + util.inspect(context));
       }
       this.exit(context);
       throw err;
@@ -187,10 +186,10 @@ Namespace.prototype.bind = function bindFactory(fn, context) {
 Namespace.prototype.enter = function enter(context) {
   assert.ok(context, 'context must be provided for entering');
   if (DEBUG_CLS_HOOKED) {
-    const asyncHooksCurrentId = getCurrentUid();
+    const executionAsyncId = getExecutionAsyncId();
     const triggerId = async_hooks.triggerAsyncId();
     const indentStr = ' '.repeat(this._indent < 0 ? 0 : this._indent);
-    debug2(`${indentStr}CONTEXT-ENTER: (${this.name}) currentUid:${currentUid} triggerId:${triggerId} asyncHooksCurrentId:${asyncHooksCurrentId} len:${this._set.length} ${util.inspect(context)}`);
+    debug2(`${indentStr}CONTEXT-ENTER: (${this.name}) currentUid:${_currentUid} executionAsyncId:${executionAsyncId} triggerId:${triggerId} len:${this._set.length} ${util.inspect(context)}`);
   }
 
   this._set.push(this.active);
@@ -200,10 +199,10 @@ Namespace.prototype.enter = function enter(context) {
 Namespace.prototype.exit = function exit(context) {
   assert.ok(context, 'context must be provided for exiting');
   if (DEBUG_CLS_HOOKED) {
-    const asyncHooksCurrentId = getCurrentUid();
+    const executionAsyncId = getExecutionAsyncId();
     const triggerId = async_hooks.triggerAsyncId();
     const indentStr = ' '.repeat(this._indent < 0 ? 0 : this._indent);
-    debug2(`${indentStr}CONTEXT-EXIT: (${this.name}) currentUid:${currentUid} triggerId:${triggerId} asyncHooksCurrentId:${asyncHooksCurrentId} len:${this._set.length} ${util.inspect(context)}`);
+    debug2(`${indentStr}CONTEXT-EXIT: (${this.name}) currentUid:${_currentUid} executionAsyncId:${executionAsyncId} triggerId:${triggerId} len:${this._set.length} ${util.inspect(context)}`);
   }
 
   // Fast path for most exits that are at the top of the stack
@@ -286,12 +285,14 @@ function createNamespace(name) {
   if (DEBUG_CLS_HOOKED) {
     debug2(`NS-CREATING NAMESPACE (${name})`);
   }
-  let namespace = new Namespace(name);
-  namespace.id = currentUid;
+  const namespace = new Namespace(name);
+  namespace.id = _currentUid;
 
   const hook = async_hooks.createHook({
     init(asyncId, type, triggerId, resource) {
-      currentUid = getCurrentUid();
+      const executionAsyncId = getExecutionAsyncId();
+      const oldCurrentUId = _currentUid;
+      _currentUid = executionAsyncId;
 
       //CHAIN Parent's Context onto child if none exists. This is needed to pass net-events.spec
       // let initContext = namespace.active;
@@ -320,9 +321,9 @@ function createNamespace(name) {
 
         if (DEBUG_CLS_HOOKED) {
           const indentStr = ' '.repeat(namespace._indent < 0 ? 0 : namespace._indent);
-          debug2(`${indentStr}INIT [${type}] (${name}) asyncId:${asyncId} currentUid:${currentUid} triggerId:${triggerId} active:${util.inspect(namespace.active, {showHidden:true, depth:2, colors:true})} resource:${resource}`);
+          debug2(`${indentStr}INIT [${type}] (${name}) currentUid:${_currentUid} oldCurrentUId:${oldCurrentUId} asyncId:${asyncId} executionAsyncId:${executionAsyncId} triggerId:${triggerId} active:${util.inspect(namespace.active, {showHidden:true, depth:2, colors:true})} resource:${resource}`);
         }
-      }else if(currentUid === 0){
+      }else if(_currentUid === 0){
         // CurrentId will be 0 when triggered from C++. Promise events
         // https://github.com/nodejs/node/blob/master/doc/api/async_hooks.md#triggerid
         const triggerId = async_hooks.triggerAsyncId();
@@ -331,11 +332,20 @@ function createNamespace(name) {
           namespace._contexts.set(asyncId, triggerIdContext);
           if (DEBUG_CLS_HOOKED) {
             const indentStr = ' '.repeat(namespace._indent < 0 ? 0 : namespace._indent);
-            debug2(`${indentStr}INIT USING CONTEXT FROM TRIGGERID [${type}] (${name}) asyncId:${asyncId} currentUid:${currentUid} triggerId:${triggerId} active:${util.inspect(namespace.active, { showHidden: true, depth: 2, colors: true })} resource:${resource}`);
+            debug2(`${indentStr}INIT USING CONTEXT FROM TRIGGERID [${type}] (${name}) currentUid:${_currentUid} oldCurrentUId:${oldCurrentUId} asyncId:${asyncId} executionAsyncId:${executionAsyncId} triggerId:${triggerId} active:${util.inspect(namespace.active, { showHidden: true, depth: 2, colors: true })} resource:${resource}`);
           }
-        } else if (DEBUG_CLS_HOOKED) {
-          const indentStr = ' '.repeat(namespace._indent < 0 ? 0 : namespace._indent);
-          debug2(`${indentStr}INIT MISSING CONTEXT [${type}] (${name}) asyncId:${asyncId} currentUid:${currentUid} triggerId:${triggerId} active:${util.inspect(namespace.active, { showHidden: true, depth: 2, colors: true })} resource:${resource}`);
+        } else {
+          const oldCurrentUIdContext = namespace._contexts.get(oldCurrentUId);
+          if (oldCurrentUIdContext) {
+            namespace._contexts.set(asyncId, oldCurrentUIdContext);
+            if (DEBUG_CLS_HOOKED) {
+              const indentStr = ' '.repeat(namespace._indent < 0 ? 0 : namespace._indent);
+              debug2(`${indentStr}INIT USING CONTEXT FROM OLDCURRENTUIDCONTEXT [${type}] (${name}) currentUid:${_currentUid} oldCurrentUId:${oldCurrentUId} asyncId:${asyncId} executionAsyncId:${executionAsyncId} triggerId:${triggerId} active:${util.inspect(namespace.active, { showHidden: true, depth: 2, colors: true })} resource:${resource}`);
+            }
+          }else if (DEBUG_CLS_HOOKED) {
+            const indentStr = ' '.repeat(namespace._indent < 0 ? 0 : namespace._indent);
+            debug2(`${indentStr}INIT MISSING CONTEXT [${type}] (${name}) currentUid:${_currentUid} oldCurrentUId:${oldCurrentUId} asyncId:${asyncId} executionAsyncId:${executionAsyncId} triggerId:${triggerId} active:${util.inspect(namespace.active, { showHidden: true, depth: 2, colors: true })} resource:${resource}`);
+          }
         }
       }
 
@@ -344,12 +354,14 @@ function createNamespace(name) {
         debug2(util.inspect(resource, {showHidden: true}));
         const parentId = resource.parentId;
         const indentStr = ' '.repeat(namespace._indent < 0 ? 0 : namespace._indent);
-        debug2(`${indentStr}INIT RESOURCE-PROMISE [${type}] (${name}) parentId:${parentId} asyncId:${asyncId} currentUid:${currentUid} triggerId:${triggerId} active:${util.inspect(namespace.active, {showHidden:true, depth:2, colors:true})} resource:${resource}`);
+        debug2(`${indentStr}INIT RESOURCE-PROMISE [${type}] (${name}) parentId:${parentId} currentUid:${_currentUid} oldCurrentUId:${oldCurrentUId} asyncId:${asyncId} executionAsyncId:${executionAsyncId} triggerId:${triggerId} active:${util.inspect(namespace.active, {showHidden:true, depth:2, colors:true})} resource:${resource}`);
       }
 
     },
     before(asyncId) {
-      currentUid = getCurrentUid();
+      const executionAsyncId = getExecutionAsyncId();
+      const oldCurrentUId = _currentUid;
+      _currentUid = executionAsyncId;
 
       let context;
 
@@ -365,13 +377,13 @@ function createNamespace(name) {
       */
 
       //HACK to work with promises until they are fixed in node > 8.1.1
-      context = namespace._contexts.get(asyncId) || namespace._contexts.get(currentUid);
+      context = namespace._contexts.get(asyncId) || namespace._contexts.get(_currentUid) || namespace._contexts.get(async_hooks.triggerAsyncId());
 
       if (context) {
         if (DEBUG_CLS_HOOKED) {
           const triggerId = async_hooks.triggerAsyncId();
           const indentStr = ' '.repeat(namespace._indent < 0 ? 0 : namespace._indent);
-          debug2(`${indentStr}BEFORE (${name}) asyncId:${asyncId} currentUid:${currentUid} triggerId:${triggerId} active:${util.inspect(namespace.active, {showHidden:true, depth:2, colors:true})} context:${util.inspect(context)}`);
+          debug2(`${indentStr}BEFORE (${name}) currentUid:${_currentUid} oldCurrentUId:${oldCurrentUId} executionAsyncId:${executionAsyncId} asyncId:${asyncId} triggerId:${triggerId} active:${util.inspect(namespace.active, {showHidden:true, depth:2, colors:true})} context:${util.inspect(context)}`);
           namespace._indent += 2;
         }
 
@@ -380,12 +392,41 @@ function createNamespace(name) {
       } else if (DEBUG_CLS_HOOKED) {
         const triggerId = async_hooks.triggerAsyncId();
         const indentStr = ' '.repeat(namespace._indent < 0 ? 0 : namespace._indent);
-        debug2(`${indentStr}BEFORE MISSING CONTEXT (${name}) asyncId:${asyncId} currentUid:${currentUid} triggerId:${triggerId} active:${util.inspect(namespace.active, {showHidden:true, depth:2, colors:true})} namespace._contexts:${util.inspect(namespace._contexts, {showHidden:true, depth:2, colors:true})}`);
+        debug2(`${indentStr}BEFORE MISSING CONTEXT (${name}) currentUid:${_currentUid} oldCurrentUId:${oldCurrentUId} executionAsyncId:${executionAsyncId} asyncId:${asyncId} triggerId:${triggerId} active:${util.inspect(namespace.active, {showHidden:true, depth:2, colors:true})} namespace._contexts:${util.inspect(namespace._contexts, {showHidden:true, depth:2, colors:true})}`);
+        namespace._indent += 2;
+      }
+    },
+    promiseResolve(asyncId) {
+      const executionAsyncId = getExecutionAsyncId();
+      const oldCurrentUId = _currentUid;
+      _currentUid = executionAsyncId;
+
+      let context;
+
+      //HACK to work with promises until they are fixed in node > 8.1.1
+      context = namespace._contexts.get(asyncId) || namespace._contexts.get(_currentUid);
+
+      if (context) {
+        if (DEBUG_CLS_HOOKED) {
+          const triggerId = async_hooks.triggerAsyncId();
+          const indentStr = ' '.repeat(namespace._indent < 0 ? 0 : namespace._indent);
+          debug2(`${indentStr}PROMISERESOLVE (${name}) currentUid:${_currentUid} oldCurrentUId:${oldCurrentUId} executionAsyncId:${executionAsyncId} asyncId:${asyncId} triggerId:${triggerId} active:${util.inspect(namespace.active, {showHidden:true, depth:2, colors:true})} context:${util.inspect(context)}`);
+          namespace._indent += 2;
+        }
+
+        namespace.enter(context);
+
+      } else if (DEBUG_CLS_HOOKED) {
+        const triggerId = async_hooks.triggerAsyncId();
+        const indentStr = ' '.repeat(namespace._indent < 0 ? 0 : namespace._indent);
+        debug2(`${indentStr}PROMISERESOLVE MISSING CONTEXT (${name}) currentUid:${_currentUid} oldCurrentUId:${oldCurrentUId} executionAsyncId:${executionAsyncId} asyncId:${asyncId} triggerId:${triggerId} active:${util.inspect(namespace.active, {showHidden:true, depth:2, colors:true})} namespace._contexts:${util.inspect(namespace._contexts, {showHidden:true, depth:2, colors:true})}`);
         namespace._indent += 2;
       }
     },
     after(asyncId) {
-      currentUid = getCurrentUid();
+      const executionAsyncId = getExecutionAsyncId();
+      const oldCurrentUId = _currentUid;
+      _currentUid = executionAsyncId;
 
       let context; // = namespace._contexts.get(currentUid);
       /*
@@ -399,14 +440,14 @@ function createNamespace(name) {
       }
       */
       //HACK to work with promises until they are fixed in node > 8.1.1
-      context = namespace._contexts.get(asyncId) || namespace._contexts.get(currentUid);
+      context = namespace._contexts.get(asyncId) || namespace._contexts.get(_currentUid);
 
       if (context) {
         if (DEBUG_CLS_HOOKED) {
           const triggerId = async_hooks.triggerAsyncId();
           namespace._indent -= 2;
           const indentStr = ' '.repeat(namespace._indent < 0 ? 0 : namespace._indent);
-          debug2(`${indentStr}AFTER (${name}) asyncId:${asyncId} currentUid:${currentUid} triggerId:${triggerId} active:${util.inspect(namespace.active, {showHidden:true, depth:2, colors:true})} context:${util.inspect(context)}`);
+          debug2(`${indentStr}AFTER (${name}) currentUid:${_currentUid} oldCurrentUId:${oldCurrentUId} executionAsyncId:${executionAsyncId} asyncId:${asyncId} triggerId:${triggerId} active:${util.inspect(namespace.active, {showHidden:true, depth:2, colors:true})} context:${util.inspect(context)}`);
         }
 
         namespace.exit(context);
@@ -415,16 +456,18 @@ function createNamespace(name) {
         const triggerId = async_hooks.triggerAsyncId();
         namespace._indent -= 2;
         const indentStr = ' '.repeat(namespace._indent < 0 ? 0 : namespace._indent);
-        debug2(`${indentStr}AFTER MISSING CONTEXT (${name}) asyncId:${asyncId} currentUid:${currentUid} triggerId:${triggerId} active:${util.inspect(namespace.active, {showHidden:true, depth:2, colors:true})} context:${util.inspect(context)}`);
+        debug2(`${indentStr}AFTER MISSING CONTEXT (${name}) currentUid:${_currentUid} oldCurrentUId:${oldCurrentUId} executionAsyncId:${executionAsyncId} asyncId:${asyncId} triggerId:${triggerId} active:${util.inspect(namespace.active, {showHidden:true, depth:2, colors:true})} context:${util.inspect(context)}`);
       }
     },
     destroy(asyncId) {
-      currentUid = getCurrentUid();
+      const executionAsyncId = getExecutionAsyncId();
+      const oldCurrentUId = _currentUid;
+      _currentUid = executionAsyncId;
 
       if (DEBUG_CLS_HOOKED) {
         const triggerId = async_hooks.triggerAsyncId();
         const indentStr = ' '.repeat(namespace._indent < 0 ? 0 : namespace._indent);
-        debug2(`${indentStr}DESTROY (${name}) currentUid:${currentUid} asyncId:${asyncId} triggerId:${triggerId} active:${util.inspect(namespace.active, {showHidden:true, depth:2, colors:true})} context:${util.inspect(namespace._contexts.get(currentUid))}`);
+        debug2(`${indentStr}DESTROY (${name}) currentUid:${_currentUid} oldCurrentUId:${oldCurrentUId} executionAsyncId:${executionAsyncId} asyncId:${asyncId} triggerId:${triggerId} active:${util.inspect(namespace.active, {showHidden:true, depth:2, colors:true})} context:${util.inspect(namespace._contexts.get(_currentUid))}`);
       }
 
       namespace._contexts.delete(asyncId);

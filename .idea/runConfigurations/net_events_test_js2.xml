@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="test\net-events.test.js" type="mocha-javascript-test-runner" factoryName="Mocha" nameIsGenerated="true">
+  <configuration default="false" name="net-events.test.js" type="mocha-javascript-test-runner" factoryName="Mocha">
     <node-interpreter>project</node-interpreter>
     <node-options />
     <working-directory>$PROJECT_DIR$</working-directory>

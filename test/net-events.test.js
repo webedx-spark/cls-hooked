@@ -25,32 +25,32 @@ describe('cls with net connection', () => {
     let serverDone = false;
     let clientDone = false;
 
-    DEBUG_CLS_HOOKED && debug2(`NET-EVENTS.TEST: First namespace.run`);
+    DEBUG_CLS_HOOKED && debug2(`NET-EVENTS.TEST [1]: First namespace.run`);
     namespace.run(() => {
       namespace.set('test', 'originalValue');
 
       let server;
 
-      DEBUG_CLS_HOOKED && debug2(`NET-EVENTS.TEST: Second namespace.run`);
+      DEBUG_CLS_HOOKED && debug2(`NET-EVENTS.TEST [2]: Second namespace.run`);
       namespace.run(() => {
         namespace.set('test', 'newContextValue');
 
-        DEBUG_CLS_HOOKED && debug2(`NET-EVENTS.TEST: net.createServer`);
+        DEBUG_CLS_HOOKED && debug2(`NET-EVENTS.TEST [4]: net.createServer`);
         server = net.createServer((socket) => {
           //namespace.bindEmitter(socket);
 
           testValue1 = namespace.get('test');
-          DEBUG_CLS_HOOKED && debug2(`NET-EVENTS.TEST: testValue1:${testValue1}`);
+          DEBUG_CLS_HOOKED && debug2(`NET-EVENTS.TEST [5]: testValue1:${testValue1}`);
 
-          DEBUG_CLS_HOOKED && debug2(`NET-EVENTS.TEST: socket.on('data')`);
+          DEBUG_CLS_HOOKED && debug2(`NET-EVENTS.TEST [6]: socket.on('data')`);
           socket.on('data', () => {
             testValue2 = namespace.get('test');
-            DEBUG_CLS_HOOKED && debug2(`NET-EVENTS.TEST: testValue2:${testValue2}`);
+            DEBUG_CLS_HOOKED && debug2(`NET-EVENTS.TEST [7]: testValue2:${testValue2}`);
 
-            DEBUG_CLS_HOOKED && debug2(`NET-EVENTS.TEST: server.close()`);
+            DEBUG_CLS_HOOKED && debug2(`NET-EVENTS.TEST [8]: server.close()`);
             server.close();
 
-            DEBUG_CLS_HOOKED && debug2(`NET-EVENTS.TEST: socket.end()`);
+            DEBUG_CLS_HOOKED && debug2(`NET-EVENTS.TEST [9]: socket.end()`);
             socket.end('GoodBye');
 
             serverDone = true;
@@ -59,27 +59,27 @@ describe('cls with net connection', () => {
 
         });
 
-        DEBUG_CLS_HOOKED && debug2(`NET-EVENTS.TEST: server.listen()`);
+        DEBUG_CLS_HOOKED && debug2(`NET-EVENTS.TEST [10]: server.listen()`);
         server.listen(() => {
           const address = server.address();
 
-          DEBUG_CLS_HOOKED && debug2(`NET-EVENTS.TEST: Server.Listen namespace.run`);
+          DEBUG_CLS_HOOKED && debug2(`NET-EVENTS.TEST [11]: Server.Listen ${JSON.stringify(address)} - namespace.run`);
           namespace.run(() => {
             namespace.set('test', 'MONKEY');
 
-            DEBUG_CLS_HOOKED && debug2(`NET-EVENTS.TEST: net.connect`);
-            const client = net.connect({port: address.port, family:6}, () => {
+            DEBUG_CLS_HOOKED && debug2(`NET-EVENTS.TEST [12]: net.connect`);
+            const client = net.connect({port: address.port, family:4}, () => {
               //namespace.bindEmitter(client);
               testValue3 = namespace.get('test');
-              DEBUG_CLS_HOOKED && debug2(`NET-EVENTS.TEST: testValue3:${testValue3}`);
-              DEBUG_CLS_HOOKED && debug2(`NET-EVENTS.TEST: client.write`);
+              DEBUG_CLS_HOOKED && debug2(`NET-EVENTS.TEST [13]: testValue3:${testValue3}`);
+              DEBUG_CLS_HOOKED && debug2(`NET-EVENTS.TEST [14]: client.write`);
               client.write('Hello');
 
-              DEBUG_CLS_HOOKED && debug2(`NET-EVENTS.TEST: client.on('data')`);
+              DEBUG_CLS_HOOKED && debug2(`NET-EVENTS.TEST [15]: client.on('data')`);
               client.on('data', () => {
                 testValue4 = namespace.get('test');
 
-                DEBUG_CLS_HOOKED && debug2(`NET-EVENTS.TEST: testValue4:${testValue4}`);
+                DEBUG_CLS_HOOKED && debug2(`NET-EVENTS.TEST [16]: testValue4:${testValue4}`);
                 clientDone = true;
                 checkDone();
               });
@@ -91,7 +91,7 @@ describe('cls with net connection', () => {
     });
 
     function checkDone() {
-      DEBUG_CLS_HOOKED && debug2(`NET-EVENTS.TEST: checkDone serverDone:${serverDone} clientDone:${clientDone}`);
+      DEBUG_CLS_HOOKED && debug2(`NET-EVENTS.TEST [--]: checkDone serverDone:${serverDone} clientDone:${clientDone}`);
       if (serverDone && clientDone) {
         done();
       }
