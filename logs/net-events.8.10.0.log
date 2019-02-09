@@ -1,0 +1,174 @@
+"C:\Program Files\nodejs\node.exe" C:\projects\Jeff-Lewis\cls-hooked\node_modules\mocha\bin\_mocha --ui bdd --reporter C:\Users\acrad\AppData\Local\JetBrains\Toolbox\apps\WebStorm\ch-0\181.4203.498\plugins\NodeJS\js\mocha-intellij\lib\mochaIntellijReporter.js C:\projects\Jeff-Lewis\cls-hooked\test\net-events.test.js
+NS-CREATING NAMESPACE (net)
+AFTER MISSING CONTEXT (net) asyncId:21 currentUid:21 triggerId:1 active:null context:undefined
+BEFORE MISSING CONTEXT (net) asyncId:24 currentUid:24 triggerId:21 active:null namespace._contexts:Map {}
+AFTER MISSING CONTEXT (net) asyncId:24 currentUid:24 triggerId:21 active:null context:undefined
+BEFORE MISSING CONTEXT (net) asyncId:5 currentUid:0 triggerId:0 active:null namespace._contexts:Map {}
+AFTER MISSING CONTEXT (net) asyncId:5 currentUid:0 triggerId:0 active:null context:undefined
+BEFORE MISSING CONTEXT (net) asyncId:7 currentUid:0 triggerId:0 active:null namespace._contexts:Map {}
+AFTER MISSING CONTEXT (net) asyncId:7 currentUid:0 triggerId:0 active:null context:undefined
+BEFORE MISSING CONTEXT (net) asyncId:9 currentUid:0 triggerId:0 active:null namespace._contexts:Map {}
+AFTER MISSING CONTEXT (net) asyncId:9 currentUid:0 triggerId:0 active:null context:undefined
+BEFORE MISSING CONTEXT (net) asyncId:11 currentUid:0 triggerId:0 active:null namespace._contexts:Map {}
+AFTER MISSING CONTEXT (net) asyncId:11 currentUid:0 triggerId:0 active:null context:undefined
+BEFORE MISSING CONTEXT (net) asyncId:13 currentUid:0 triggerId:0 active:null namespace._contexts:Map {}
+AFTER MISSING CONTEXT (net) asyncId:13 currentUid:0 triggerId:0 active:null context:undefined
+BEFORE MISSING CONTEXT (net) asyncId:15 currentUid:0 triggerId:0 active:null namespace._contexts:Map {}
+AFTER MISSING CONTEXT (net) asyncId:15 currentUid:0 triggerId:0 active:null context:undefined
+BEFORE MISSING CONTEXT (net) asyncId:17 currentUid:0 triggerId:0 active:null namespace._contexts:Map {}
+AFTER MISSING CONTEXT (net) asyncId:17 currentUid:0 triggerId:0 active:null context:undefined
+BEFORE MISSING CONTEXT (net) asyncId:19 currentUid:0 triggerId:0 active:null namespace._contexts:Map {}
+AFTER MISSING CONTEXT (net) asyncId:19 currentUid:0 triggerId:0 active:null context:undefined
+DESTROY (net) currentUid:0 asyncId:21 triggerId:0 active:null context:undefined
+DESTROY (net) currentUid:0 asyncId:24 triggerId:0 active:null context:undefined
+DESTROY (net) currentUid:0 asyncId:5 triggerId:0 active:null context:undefined
+DESTROY (net) currentUid:0 asyncId:7 triggerId:0 active:null context:undefined
+DESTROY (net) currentUid:0 asyncId:9 triggerId:0 active:null context:undefined
+DESTROY (net) currentUid:0 asyncId:11 triggerId:0 active:null context:undefined
+DESTROY (net) currentUid:0 asyncId:13 triggerId:0 active:null context:undefined
+DESTROY (net) currentUid:0 asyncId:15 triggerId:0 active:null context:undefined
+DESTROY (net) currentUid:0 asyncId:17 triggerId:0 active:null context:undefined
+DESTROY (net) currentUid:0 asyncId:19 triggerId:0 active:null context:undefined
+BEFORE MISSING CONTEXT (net) asyncId:25 currentUid:25 triggerId:21 active:null namespace._contexts:Map {}
+  CONTEXT-CREATED Context: (net) currentUid:25 triggerId:21 asyncHooksCurrentId:25 len:0 context:{ _ns_name: 'net', id: 25 }
+  CONTEXT-ENTER: (net) currentUid:25 triggerId:21 asyncHooksCurrentId:25 len:0 { _ns_name: 'net', id: 25 }
+  CONTEXT-RUN BEGIN: (net) currentUid:25 triggerId:21 asyncHooksCurrentId:25 len:1 context:{ _ns_name: 'net', id: 25 }
+  CONTEXT-SET KEY:test=originalValue in ns:net currentUid:25 active:{ _ns_name: 'net', id: 25, test: 'originalValue' }
+  CONTEXT-CREATED Context: (net) currentUid:25 triggerId:21 asyncHooksCurrentId:25 len:1 context:{ _ns_name: 'net', id: 25 }
+  CONTEXT-ENTER: (net) currentUid:25 triggerId:21 asyncHooksCurrentId:25 len:1 { _ns_name: 'net', id: 25 }
+  CONTEXT-RUN BEGIN: (net) currentUid:25 triggerId:21 asyncHooksCurrentId:25 len:2 context:{ _ns_name: 'net', id: 25 }
+  CONTEXT-SET KEY:test=newContextValue in ns:net currentUid:25 active:{ _ns_name: 'net', id: 25, test: 'newContextValue' }
+  INIT [TCPSERVERWRAP] (net) asyncId:28 currentUid:25 triggerId:25 active:{ _ns_name: 'net', id: 25, test: 'newContextValue' } resource:[object TCP]
+  INIT [TickObject] (net) asyncId:29 currentUid:25 triggerId:28 active:{ _ns_name: 'net', id: 25, test: 'newContextValue' } resource:[object Object]
+  CONTEXT-RUN END: (net) currentUid:25 triggerId:21 asyncHooksCurrentId:25 len:2 { _ns_name: 'net', id: 25, test: 'newContextValue' }
+  CONTEXT-EXIT: (net) currentUid:25 triggerId:21 asyncHooksCurrentId:25 len:2 { _ns_name: 'net', id: 25, test: 'newContextValue' }
+  CONTEXT-RUN END: (net) currentUid:25 triggerId:21 asyncHooksCurrentId:25 len:1 { _ns_name: 'net', id: 25, test: 'originalValue' }
+  CONTEXT-EXIT: (net) currentUid:25 triggerId:21 asyncHooksCurrentId:25 len:1 { _ns_name: 'net', id: 25, test: 'originalValue' }
+AFTER MISSING CONTEXT (net) asyncId:25 currentUid:25 triggerId:21 active:null context:undefined
+BEFORE (net) asyncId:29 currentUid:29 triggerId:28 active:null context:{ _ns_name: 'net', id: 25, test: 'newContextValue' }
+  CONTEXT-ENTER: (net) currentUid:29 triggerId:28 asyncHooksCurrentId:29 len:0 { _ns_name: 'net', id: 25, test: 'newContextValue' }
+  CONTEXT-CREATED Context: (net) currentUid:29 triggerId:28 asyncHooksCurrentId:29 len:1 context:{ _ns_name: 'net', id: 29 }
+  CONTEXT-ENTER: (net) currentUid:29 triggerId:28 asyncHooksCurrentId:29 len:1 { _ns_name: 'net', id: 29 }
+  CONTEXT-RUN BEGIN: (net) currentUid:29 triggerId:28 asyncHooksCurrentId:29 len:2 context:{ _ns_name: 'net', id: 29 }
+  CONTEXT-SET KEY:test=MONKEY in ns:net currentUid:29 active:{ _ns_name: 'net', id: 29, test: 'MONKEY' }
+  INIT [TCPWRAP] (net) asyncId:30 currentUid:29 triggerId:29 active:{ _ns_name: 'net', id: 29, test: 'MONKEY' } resource:[object TCP]
+  INIT [GETADDRINFOREQWRAP] (net) asyncId:31 currentUid:29 triggerId:30 active:{ _ns_name: 'net', id: 29, test: 'MONKEY' } resource:[object GetAddrInfoReqWrap]
+  CONTEXT-RUN END: (net) currentUid:29 triggerId:28 asyncHooksCurrentId:29 len:2 { _ns_name: 'net', id: 29, test: 'MONKEY' }
+  CONTEXT-EXIT: (net) currentUid:29 triggerId:28 asyncHooksCurrentId:29 len:2 { _ns_name: 'net', id: 29, test: 'MONKEY' }
+AFTER (net) asyncId:29 currentUid:29 triggerId:28 active:{ _ns_name: 'net', id: 25, test: 'newContextValue' } context:{ _ns_name: 'net', id: 25, test: 'newContextValue' }
+CONTEXT-EXIT: (net) currentUid:29 triggerId:28 asyncHooksCurrentId:29 len:1 { _ns_name: 'net', id: 25, test: 'newContextValue' }
+BEFORE MISSING CONTEXT (net) asyncId:23 currentUid:0 triggerId:0 active:null namespace._contexts:Map {
+  28 => { _ns_name: 'net', id: 25, test: 'newContextValue' },
+  29 => { _ns_name: 'net', id: 25, test: 'newContextValue' },
+  30 => { _ns_name: 'net', id: 29, test: 'MONKEY' },
+  31 => { _ns_name: 'net', id: 29, test: 'MONKEY' },
+  [size]: 4 }
+AFTER MISSING CONTEXT (net) asyncId:23 currentUid:0 triggerId:0 active:null context:undefined
+DESTROY (net) currentUid:0 asyncId:25 triggerId:0 active:null context:undefined
+DESTROY (net) currentUid:0 asyncId:29 triggerId:0 active:null context:undefined
+DESTROY (net) currentUid:0 asyncId:23 triggerId:0 active:null context:undefined
+BEFORE (net) asyncId:31 currentUid:0 triggerId:0 active:null context:{ _ns_name: 'net', id: 29, test: 'MONKEY' }
+  CONTEXT-ENTER: (net) currentUid:0 triggerId:0 asyncHooksCurrentId:0 len:0 { _ns_name: 'net', id: 29, test: 'MONKEY' }
+  INIT [TCPCONNECTWRAP] (net) asyncId:32 currentUid:31 triggerId:30 active:{ _ns_name: 'net', id: 29, test: 'MONKEY' } resource:[object TCPConnectWrap]
+AFTER (net) asyncId:31 currentUid:0 triggerId:0 active:{ _ns_name: 'net', id: 29, test: 'MONKEY' } context:{ _ns_name: 'net', id: 29, test: 'MONKEY' }
+CONTEXT-EXIT: (net) currentUid:0 triggerId:0 asyncHooksCurrentId:0 len:1 { _ns_name: 'net', id: 29, test: 'MONKEY' }
+DESTROY (net) currentUid:0 asyncId:31 triggerId:0 active:null context:undefined
+BEFORE (net) asyncId:32 currentUid:0 triggerId:0 active:null context:{ _ns_name: 'net', id: 29, test: 'MONKEY' }
+  CONTEXT-ENTER: (net) currentUid:0 triggerId:0 asyncHooksCurrentId:0 len:0 { _ns_name: 'net', id: 29, test: 'MONKEY' }
+  CONTEXT-GETTING KEY:test=MONKEY (net) currentUid:0 active:{ _ns_name: 'net', id: 29, test: 'MONKEY' }
+  CONTEXT-GETTING KEY: (net) test=MONKEY currentUid:0 triggerId:30 asyncHooksCurrentId:32 len:1 active:{ _ns_name: 'net', id: 29, test: 'MONKEY' }
+  INIT [TickObject] (net) asyncId:33 currentUid:32 triggerId:32 active:{ _ns_name: 'net', id: 29, test: 'MONKEY' } resource:[object Object]
+  INIT [TickObject] (net) asyncId:34 currentUid:32 triggerId:32 active:{ _ns_name: 'net', id: 29, test: 'MONKEY' } resource:[object Object]
+AFTER (net) asyncId:32 currentUid:0 triggerId:0 active:{ _ns_name: 'net', id: 29, test: 'MONKEY' } context:{ _ns_name: 'net', id: 29, test: 'MONKEY' }
+CONTEXT-EXIT: (net) currentUid:0 triggerId:0 asyncHooksCurrentId:0 len:1 { _ns_name: 'net', id: 29, test: 'MONKEY' }
+BEFORE (net) asyncId:33 currentUid:33 triggerId:32 active:null context:{ _ns_name: 'net', id: 29, test: 'MONKEY' }
+  CONTEXT-ENTER: (net) currentUid:33 triggerId:32 asyncHooksCurrentId:33 len:0 { _ns_name: 'net', id: 29, test: 'MONKEY' }
+AFTER (net) asyncId:33 currentUid:33 triggerId:32 active:{ _ns_name: 'net', id: 29, test: 'MONKEY' } context:{ _ns_name: 'net', id: 29, test: 'MONKEY' }
+CONTEXT-EXIT: (net) currentUid:33 triggerId:32 asyncHooksCurrentId:33 len:1 { _ns_name: 'net', id: 29, test: 'MONKEY' }
+BEFORE (net) asyncId:34 currentUid:34 triggerId:32 active:null context:{ _ns_name: 'net', id: 29, test: 'MONKEY' }
+  CONTEXT-ENTER: (net) currentUid:34 triggerId:32 asyncHooksCurrentId:34 len:0 { _ns_name: 'net', id: 29, test: 'MONKEY' }
+AFTER (net) asyncId:34 currentUid:34 triggerId:32 active:{ _ns_name: 'net', id: 29, test: 'MONKEY' } context:{ _ns_name: 'net', id: 29, test: 'MONKEY' }
+CONTEXT-EXIT: (net) currentUid:34 triggerId:32 asyncHooksCurrentId:34 len:1 { _ns_name: 'net', id: 29, test: 'MONKEY' }
+INIT MISSING CONTEXT [TCPWRAP] (net) asyncId:35 currentUid:0 triggerId:0 active:null resource:[object TCP]
+BEFORE (net) asyncId:28 currentUid:0 triggerId:0 active:null context:{ _ns_name: 'net', id: 25, test: 'newContextValue' }
+  CONTEXT-ENTER: (net) currentUid:0 triggerId:0 asyncHooksCurrentId:0 len:0 { _ns_name: 'net', id: 25, test: 'newContextValue' }
+  CONTEXT-GETTING KEY:test=newContextValue (net) currentUid:0 active:{ _ns_name: 'net', id: 25, test: 'newContextValue' }
+  CONTEXT-GETTING KEY: (net) test=newContextValue currentUid:0 triggerId:25 asyncHooksCurrentId:28 len:1 active:{ _ns_name: 'net', id: 25, test: 'newContextValue' }
+  INIT [TickObject] (net) asyncId:36 currentUid:28 triggerId:28 active:{ _ns_name: 'net', id: 25, test: 'newContextValue' } resource:[object Object]
+AFTER (net) asyncId:28 currentUid:0 triggerId:0 active:{ _ns_name: 'net', id: 25, test: 'newContextValue' } context:{ _ns_name: 'net', id: 25, test: 'newContextValue' }
+CONTEXT-EXIT: (net) currentUid:0 triggerId:0 asyncHooksCurrentId:0 len:1 { _ns_name: 'net', id: 25, test: 'newContextValue' }
+BEFORE (net) asyncId:36 currentUid:36 triggerId:28 active:null context:{ _ns_name: 'net', id: 25, test: 'newContextValue' }
+  CONTEXT-ENTER: (net) currentUid:36 triggerId:28 asyncHooksCurrentId:36 len:0 { _ns_name: 'net', id: 25, test: 'newContextValue' }
+AFTER (net) asyncId:36 currentUid:36 triggerId:28 active:{ _ns_name: 'net', id: 25, test: 'newContextValue' } context:{ _ns_name: 'net', id: 25, test: 'newContextValue' }
+CONTEXT-EXIT: (net) currentUid:36 triggerId:28 asyncHooksCurrentId:36 len:1 { _ns_name: 'net', id: 25, test: 'newContextValue' }
+DESTROY (net) currentUid:0 asyncId:33 triggerId:0 active:null context:undefined
+DESTROY (net) currentUid:0 asyncId:34 triggerId:0 active:null context:undefined
+DESTROY (net) currentUid:0 asyncId:32 triggerId:0 active:null context:undefined
+DESTROY (net) currentUid:0 asyncId:36 triggerId:0 active:null context:undefined
+BEFORE MISSING CONTEXT (net) asyncId:35 currentUid:0 triggerId:0 active:null namespace._contexts:Map {
+  28 => { _ns_name: 'net', id: 25, test: 'newContextValue' },
+  30 => { _ns_name: 'net', id: 29, test: 'MONKEY' },
+  [size]: 2 }
+  CONTEXT-GETTING KEY NO ACTIVE NS: (net) test=undefined currentUid:0 triggerId:28 asyncHooksCurrentId:35 len:0
+AFTER MISSING CONTEXT (net) asyncId:35 currentUid:0 triggerId:0 active:null context:undefined
+BEFORE MISSING CONTEXT (net) asyncId:37 currentUid:37 triggerId:35 active:null namespace._contexts:Map {
+  28 => { _ns_name: 'net', id: 25, test: 'newContextValue' },
+  30 => { _ns_name: 'net', id: 29, test: 'MONKEY' },
+  [size]: 2 }
+AFTER MISSING CONTEXT (net) asyncId:37 currentUid:37 triggerId:35 active:null context:undefined
+BEFORE MISSING CONTEXT (net) asyncId:38 currentUid:38 triggerId:35 active:null namespace._contexts:Map {
+  28 => { _ns_name: 'net', id: 25, test: 'newContextValue' },
+  30 => { _ns_name: 'net', id: 29, test: 'MONKEY' },
+  [size]: 2 }
+AFTER MISSING CONTEXT (net) asyncId:38 currentUid:38 triggerId:35 active:null context:undefined
+DESTROY (net) currentUid:0 asyncId:37 triggerId:0 active:null context:undefined
+DESTROY (net) currentUid:0 asyncId:38 triggerId:0 active:null context:undefined
+BEFORE MISSING CONTEXT (net) asyncId:39 currentUid:0 triggerId:0 active:null namespace._contexts:Map {
+  28 => { _ns_name: 'net', id: 25, test: 'newContextValue' },
+  30 => { _ns_name: 'net', id: 29, test: 'MONKEY' },
+  [size]: 2 }
+AFTER MISSING CONTEXT (net) asyncId:39 currentUid:0 triggerId:0 active:null context:undefined
+BEFORE (net) asyncId:30 currentUid:0 triggerId:0 active:null context:{ _ns_name: 'net', id: 29, test: 'MONKEY' }
+  CONTEXT-ENTER: (net) currentUid:0 triggerId:0 asyncHooksCurrentId:0 len:0 { _ns_name: 'net', id: 29, test: 'MONKEY' }
+  CONTEXT-GETTING KEY:test=MONKEY (net) currentUid:0 active:{ _ns_name: 'net', id: 29, test: 'MONKEY' }
+  CONTEXT-GETTING KEY: (net) test=MONKEY currentUid:0 triggerId:29 asyncHooksCurrentId:30 len:1 active:{ _ns_name: 'net', id: 29, test: 'MONKEY' }
+  INIT [WRITEWRAP] (net) asyncId:40 currentUid:30 triggerId:3 active:{ _ns_name: 'net', id: 29, test: 'MONKEY' } resource:[object WriteWrap]
+  INIT [TickObject] (net) asyncId:41 currentUid:30 triggerId:30 active:{ _ns_name: 'net', id: 29, test: 'MONKEY' } resource:[object Object]
+  INIT [Immediate] (net) asyncId:42 currentUid:30 triggerId:30 active:{ _ns_name: 'net', id: 29, test: 'MONKEY' } resource:[object Object]
+  INIT [TickObject] (net) asyncId:43 currentUid:30 triggerId:30 active:{ _ns_name: 'net', id: 29, test: 'MONKEY' } resource:[object Object]
+AFTER (net) asyncId:30 currentUid:0 triggerId:0 active:{ _ns_name: 'net', id: 29, test: 'MONKEY' } context:{ _ns_name: 'net', id: 29, test: 'MONKEY' }
+CONTEXT-EXIT: (net) currentUid:0 triggerId:0 asyncHooksCurrentId:0 len:1 { _ns_name: 'net', id: 29, test: 'MONKEY' }
+BEFORE (net) asyncId:41 currentUid:41 triggerId:30 active:null context:{ _ns_name: 'net', id: 29, test: 'MONKEY' }
+  CONTEXT-ENTER: (net) currentUid:41 triggerId:30 asyncHooksCurrentId:41 len:0 { _ns_name: 'net', id: 29, test: 'MONKEY' }
+AFTER (net) asyncId:41 currentUid:41 triggerId:30 active:{ _ns_name: 'net', id: 29, test: 'MONKEY' } context:{ _ns_name: 'net', id: 29, test: 'MONKEY' }
+CONTEXT-EXIT: (net) currentUid:41 triggerId:30 asyncHooksCurrentId:41 len:1 { _ns_name: 'net', id: 29, test: 'MONKEY' }
+  INIT [WRITEWRAP] (net) asyncId:62 currentUid:59 triggerId:3 active:{ _ns_name: 'net', id: 29, test: 'MONKEY' } resource:[object WriteWrap]
+  INIT [TickObject] (net) asyncId:63 currentUid:59 triggerId:59 active:{ _ns_name: 'net', id: 29, test: 'MONKEY' } resource:[object Object]
+  INIT [Immediate] (net) asyncId:64 currentUid:59 triggerId:59 active:{ _ns_name: 'net', id: 29, test: 'MONKEY' } resource:[object Object]
+AFTER (net) asyncId:59 currentUid:59 triggerId:58 active:{ _ns_name: 'net', id: 29BEFORE MISSING CONTEXT (net) asyncId:6 currentUid:6 triggerId:1 active:null namespace._contexts:Map {}
+AFTER MISSING CONTEXT (net) asyncId:6 currentUid:6 triggerId:1 active:null context:undefined
+BEFORE MISSING CONTEXT (net) asyncId:8 currentUid:8 triggerId:1 active:null namespace._contexts:Map {}
+AFTER MISSING CONTEXT (net) asyncId:8 currentUid:8 triggerId:1 active:null context:undefined
+BEFORE MISSING CONTEXT (net) asyncId:10 currentUid:10 triggerId:1 active:null namespace._contexts:Map {}
+AFTER MISSING CONTEXT (net) asyncId:10 currentUid:10 triggerId:1 active:null context:undefined
+BEFORE MISSING CONTEXT (net) asyncId:12 currentUid:12 triggerId:1 active:null namespace._contexts:Map {}
+AFTER MISSING CONTEXT (net) asyncId:12 currentUid:12 triggerId:1 active:null context:undefined
+BEFORE MISSING CONTEXT (net) asyncId:14 currentUid:14 triggerId:1 active:null namespace._contexts:Map {}
+AFTER MISSING CONTEXT (net) asyncId:14 currentUid:14 triggerId:1 active:null context:undefined
+BEFORE MISSING CONTEXT (net) asyncId:16 currentUid:16 triggerId:1 active:null namespace._contexts:Map {}
+AFTER MISSING CONTEXT (net) asyncId:16 currentUid:16 triggerId:1 active:null context:undefined
+BEFORE MISSING CONTEXT (net) asyncId:18 currentUid:18 triggerId:1 active:null namespace._contexts:Map {}
+AFTER MISSING CONTEXT (net) asyncId:18 currentUid:18 triggerId:1 active:null context:undefined
+BEFORE MISSING CONTEXT (net) asyncId:20 currentUid:20 triggerId:1 active:null namespace._contexts:Map {}
+AFTER MISSING CONTEXT (net) asyncId:20 currentUid:20 triggerId:1 active:null context:undefined
+DESTROY (net) currentUid:0 asyncId:6 triggerId:0 active:null context:undefined
+DESTROY (net) currentUid:0 asyncId:8 triggerId:0 active:null context:undefined
+DESTROY (net) currentUid:0 asyncId:10 triggerId:0 active:null context:undefined
+DESTROY (net) currentUid:0 asyncId:12 triggerId:0 active:null context:undefined
+DESTROY (net) currentUid:0 asyncId:14 triggerId:0 active:null context:undefined
+DESTROY (net) currentUid:0 asyncId:16 triggerId:0 active:null context:undefined
+DESTROY (net) currentUid:0 asyncId:18 triggerId:0 active:null context:undefined
+DESTROY (net) currentUid:0 asyncId:20 triggerId:0 active:null context:undefined
+BEFORE MISSING CONTEXT (net) asyncId:21 currentUid:21 triggerId:1 active:null namespace._contexts:Map {}
+
+Process finished with exit code 1
