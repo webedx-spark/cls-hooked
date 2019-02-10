@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="namespaces-multiple-values.specs.js" type="mocha-javascript-test-runner">
+  <configuration default="false" name="namespaces-multiple-values.test.js" type="mocha-javascript-test-runner">
     <node-interpreter>project</node-interpreter>
     <node-options />
     <mocha-package>$PROJECT_DIR$/node_modules/mocha</mocha-package>
