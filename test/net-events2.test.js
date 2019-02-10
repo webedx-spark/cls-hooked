@@ -1,9 +1,8 @@
 'use strict';
 
-const expect = require('chai').expect;
-
-const net = require('net');
 const cls = require('../index.js');
+const expect = require('chai').expect;
+const net = require('net');
 
 describe('cls with net connection 2', function() {
 

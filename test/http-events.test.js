@@ -1,10 +1,7 @@
 'use strict';
 
-var DATUM1 = 'Hello';
-var DATUM2 = 'GoodBye';
-var TEST_VALUE = 0x1337;
-var PORT = 55667;
-
+let cls = require('../index');
+let http = require('http');
 var chai = require('chai');
 var sinon = require('sinon');
 var sinonChai = require('sinon-chai');
@@ -15,8 +12,10 @@ describe('cls with http connections', function () {
 
   this.timeout(1000);
 
-  let http = require('http');
-  let cls = require('../index');
+  var DATUM1 = 'Hello';
+  var DATUM2 = 'GoodBye';
+  var TEST_VALUE = 0x1337;
+  var PORT = 55667;
 
   describe('client server', function clientServerTest() {
 
@@ -69,7 +68,7 @@ describe('cls with http connections', function () {
       });
 
 
-    })
+    });
 
     it('server request event should be called', () => {
       requestSpy.called.should.be.true;

@@ -1,10 +1,10 @@
 'use strict';
 
+const cls = require('../index.js');
 require('mocha');
 const chai = require('chai');
 const should = chai.should();
 const net = require('net');
-const cls = require('../index.js');
 const util = require('util');
 const DEBUG_CLS_HOOKED = process.env.DEBUG_CLS_HOOKED;
 
@@ -63,7 +63,7 @@ describe('cls with net connection', () => {
         server.listen(() => {
           const address = server.address();
 
-          DEBUG_CLS_HOOKED && debug2(`NET-EVENTS.TEST [11]: Server.Listen ${JSON.stringify(address)} - namespace.run`);
+          DEBUG_CLS_HOOKED && debug2(`NET-EVENTS.TEST [11]: server.listen ${JSON.stringify(address)} - Third namespace.run`);
           namespace.run(() => {
             namespace.set('test', 'MONKEY');
 
