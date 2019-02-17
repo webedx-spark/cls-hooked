@@ -339,7 +339,7 @@ function createNamespace(name){
 
       //HACK to work with promises until they are fixed in node > 8.1.1
       //context = namespace._contexts.get(asyncId) || namespace._contexts.get(_currentUid) || namespace._contexts.get(async_hooks.triggerAsyncId());
-      context = namespace._contexts.get(asyncId) || namespace._contexts.get(executionAsyncId) || namespace._contexts.get(async_hooks.triggerAsyncId());
+      context = namespace._contexts.get(asyncId) || namespace._contexts.get(async_hooks.triggerAsyncId());
 
       if(context){
         DEBUG_CLS_HOOKED && debug3(`BEFORE (${name})`, asyncId, namespace, context);
@@ -381,7 +381,8 @@ function createNamespace(name){
       }
       */
       //HACK to work with promises until they are fixed in node > 8.1.1
-      context = namespace._contexts.get(asyncId) || namespace._contexts.get(executionAsyncId);
+      //context = namespace._contexts.get(asyncId) || namespace._contexts.get(executionAsyncId) || namespace._contexts.get(async_hooks.triggerAsyncId());
+      context = namespace._contexts.get(asyncId) || namespace._contexts.get(async_hooks.triggerAsyncId());
 
       namespace._indent -= 2;
       if(context){
