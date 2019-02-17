@@ -1,0 +1,8 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="http-events36-post.self-test.js" type="NodeJSConfigurationType" path-to-js-file="http-events36-post.self-test.js" working-dir="$PROJECT_DIR$/test">
+    <envs>
+      <env name="DEBUG_CLS_HOOKED" value="1" />
+    </envs>
+    <method v="2" />
+  </configuration>
+</component>

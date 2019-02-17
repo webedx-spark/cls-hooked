@@ -1,0 +1,122 @@
+NS-CREATING NAMESPACE (ns)
+INIT MISSING CONTEXT [TCPSERVERWRAP] (ns) aid:2 eid:1 tid:0 peid:1 active:null context:null resource:[object TCP]
+INIT MISSING CONTEXT [TickObject] (ns) aid:3 eid:1 tid:0 peid:1 active:null context:null resource:[object Object]
+INIT MISSING CONTEXT [TCPWRAP] (ns) aid:4 eid:1 tid:0 peid:1 active:null context:null resource:[object TCP]
+INIT MISSING CONTEXT [DNSCHANNEL] (ns) aid:5 eid:1 tid:0 peid:1 active:null context:null resource:[object ChannelWrap]
+INIT MISSING CONTEXT [GETADDRINFOREQWRAP] (ns) aid:6 eid:1 tid:0 peid:1 active:null context:null resource:[object GetAddrInfoReqWrap]
+INIT MISSING CONTEXT [TickObject] (ns) aid:7 eid:1 tid:0 peid:1 active:null context:null resource:[object Object]
+BEFORE MISSING CONTEXT (ns) aid:3 eid:3 tid:2 peid:3 active:null context:undefined resource:undefined
+AFTER MISSING CONTEXT (ns) aid:3 eid:3 tid:2 peid:3 active:null context:undefined resource:undefined
+BEFORE MISSING CONTEXT (ns) aid:7 eid:7 tid:1 peid:7 active:null context:undefined resource:undefined
+  INIT MISSING CONTEXT [HTTPPARSER] (ns) aid:8 eid:7 tid:1 peid:7 active:null context:null resource:[object HTTPParser]
+  INIT MISSING CONTEXT [TickObject] (ns) aid:9 eid:7 tid:1 peid:7 active:null context:null resource:[object Object]
+AFTER MISSING CONTEXT (ns) aid:7 eid:7 tid:1 peid:7 active:null context:undefined resource:undefined
+BEFORE MISSING CONTEXT (ns) aid:9 eid:9 tid:7 peid:9 active:null context:undefined resource:undefined
+AFTER MISSING CONTEXT (ns) aid:9 eid:9 tid:7 peid:9 active:null context:undefined resource:undefined
+DESTROY (ns) aid:3 eid:0 tid:0 peid:0 active:null context:undefined resource:undefined
+DESTROY (ns) aid:7 eid:0 tid:0 peid:0 active:null context:undefined resource:undefined
+DESTROY (ns) aid:9 eid:0 tid:0 peid:0 active:null context:undefined resource:undefined
+BEFORE MISSING CONTEXT (ns) aid:6 eid:0 tid:0 peid:0 active:null context:undefined resource:undefined
+  INIT MISSING CONTEXT [TCPCONNECTWRAP] (ns) aid:10 eid:6 tid:4 peid:6 active:null context:null resource:[object TCPConnectWrap]
+AFTER MISSING CONTEXT (ns) aid:6 eid:0 tid:0 peid:0 active:null context:undefined resource:undefined
+DESTROY (ns) aid:6 eid:0 tid:0 peid:0 active:null context:undefined resource:undefined
+INIT MISSING CONTEXT [TCPWRAP] (ns) aid:11 eid:0 tid:0 peid:0 active:null context:null resource:[object TCP]
+BEFORE MISSING CONTEXT (ns) aid:2 eid:0 tid:0 peid:0 active:null context:undefined resource:undefined
+  INIT MISSING CONTEXT [Timeout] (ns) aid:12 eid:2 tid:1 peid:2 active:null context:null resource:[object Object]
+  INIT MISSING CONTEXT [TIMERWRAP] (ns) aid:13 eid:2 tid:1 peid:2 active:null context:null resource:[object Timer]
+  INIT MISSING CONTEXT [HTTPPARSER] (ns) aid:14 eid:2 tid:1 peid:2 active:null context:null resource:[object HTTPParser]
+  INIT MISSING CONTEXT [Timeout] (ns) aid:15 eid:2 tid:1 peid:2 active:null context:null resource:[object Object]
+  INIT MISSING CONTEXT [TIMERWRAP] (ns) aid:16 eid:2 tid:1 peid:2 active:null context:null resource:[object Timer]
+  INIT MISSING CONTEXT [TickObject] (ns) aid:17 eid:2 tid:1 peid:2 active:null context:null resource:[object Object]
+AFTER MISSING CONTEXT (ns) aid:2 eid:0 tid:0 peid:0 active:null context:undefined resource:undefined
+BEFORE MISSING CONTEXT (ns) aid:17 eid:17 tid:11 peid:17 active:null context:undefined resource:undefined
+AFTER MISSING CONTEXT (ns) aid:17 eid:17 tid:11 peid:17 active:null context:undefined resource:undefined
+BEFORE MISSING CONTEXT (ns) aid:10 eid:0 tid:0 peid:0 active:null context:undefined resource:undefined
+AFTER MISSING CONTEXT (ns) aid:10 eid:0 tid:0 peid:0 active:null context:undefined resource:undefined
+DESTROY (ns) aid:17 eid:0 tid:0 peid:0 active:null context:undefined resource:undefined
+DESTROY (ns) aid:10 eid:0 tid:0 peid:0 active:null context:undefined resource:undefined
+BEFORE MISSING CONTEXT (ns) aid:14 eid:0 tid:0 peid:0 active:null context:undefined resource:undefined
+  CONTEXT-CREATED Context: (ns) aid:null eid:14 tid:11 peid:14 active:null context:{ _ns_name: 'ns', id: 14 } resource:undefined
+  CONTEXT-ENTER: (ns) aid:null eid:14 tid:11 peid:14 active:null context:{ _ns_name: 'ns', id: 14 } resource:undefined
+  CONTEXT-RUN BEGIN: (ns) aid:null eid:14 tid:11 peid:14 active:{ _ns_name: 'ns', id: 14 } context:{ _ns_name: 'ns', id: 14 } resource:undefined
+  CONTEXT-SET (ns) KEY:key=1 aid:null eid:14 tid:11 peid:14 active:{ _ns_name: 'ns', id: 14, key: 1 } context:{ _ns_name: 'ns', id: 14, key: 1 } resource:undefined
+  INIT [TickObject] (ns) aid:18 eid:14 tid:11 peid:14 active:{ _ns_name: 'ns', id: 14, key: 1 } context:null resource:[object Object]
+  CONTEXT-RUN END: (ns) aid:null eid:14 tid:11 peid:14 active:{ _ns_name: 'ns', id: 14, key: 1 } context:{ _ns_name: 'ns', id: 14, key: 1 } resource:undefined
+  CONTEXT-EXIT: (ns) aid:null eid:14 tid:11 peid:14 active:{ _ns_name: 'ns', id: 14, key: 1 } context:{ _ns_name: 'ns', id: 14, key: 1 } resource:undefined
+AFTER MISSING CONTEXT (ns) aid:14 eid:0 tid:0 peid:0 active:null context:undefined resource:undefined
+BEFORE MISSING CONTEXT (ns) aid:14 eid:0 tid:0 peid:0 active:null context:undefined resource:undefined
+AFTER MISSING CONTEXT (ns) aid:14 eid:0 tid:0 peid:0 active:null context:undefined resource:undefined
+BEFORE (ns) aid:18 eid:18 tid:14 peid:18 active:null context:{ _ns_name: 'ns', id: 14, key: 1 } resource:undefined
+  CONTEXT-ENTER: (ns) aid:null eid:18 tid:14 peid:18 active:null context:{ _ns_name: 'ns', id: 14, key: 1 } resource:undefined
+  CONTEXT-GETTING KEY: (ns) KEY:key aid:null eid:18 tid:14 peid:18 active:{ _ns_name: 'ns', id: 14, key: 1 } context:{ _ns_name: 'ns', id: 14, key: 1 } resource:undefined
+------ Server: POST onData: A message from client
+AFTER (ns) aid:18 eid:18 tid:14 peid:18 active:{ _ns_name: 'ns', id: 14, key: 1 } context:{ _ns_name: 'ns', id: 14, key: 1 } resource:undefined
+CONTEXT-EXIT: (ns) aid:null eid:18 tid:14 peid:18 active:{ _ns_name: 'ns', id: 14, key: 1 } context:{ _ns_name: 'ns', id: 14, key: 1 } resource:undefined
+BEFORE MISSING CONTEXT (ns) aid:14 eid:0 tid:0 peid:0 active:null context:undefined resource:undefined
+  INIT MISSING CONTEXT [TickObject] (ns) aid:19 eid:14 tid:11 peid:14 active:null context:null resource:[object Object]
+AFTER MISSING CONTEXT (ns) aid:14 eid:0 tid:0 peid:0 active:null context:undefined resource:undefined
+BEFORE MISSING CONTEXT (ns) aid:14 eid:0 tid:0 peid:0 active:null context:undefined resource:undefined
+AFTER MISSING CONTEXT (ns) aid:14 eid:0 tid:0 peid:0 active:null context:undefined resource:undefined
+BEFORE MISSING CONTEXT (ns) aid:19 eid:19 tid:14 peid:19 active:null context:undefined resource:undefined
+  CONTEXT-GETTING KEY NO ACTIVE NS: (ns) KEY:key aid:null eid:19 tid:14 peid:19 active:null context:undefined resource:undefined
+------ Server: POST onEnd: key=undefined
+  CONTEXT-GETTING KEY NO ACTIVE NS: (ns) KEY:key aid:null eid:19 tid:14 peid:19 active:null context:undefined resource:undefined
+  INIT MISSING CONTEXT [TickObject] (ns) aid:20 eid:19 tid:14 peid:19 active:null context:null resource:[object Object]
+  INIT MISSING CONTEXT [TickObject] (ns) aid:21 eid:19 tid:14 peid:19 active:null context:null resource:[object Object]
+AFTER MISSING CONTEXT (ns) aid:19 eid:19 tid:14 peid:19 active:null context:undefined resource:undefined
+BEFORE MISSING CONTEXT (ns) aid:20 eid:20 tid:11 peid:20 active:null context:undefined resource:undefined
+  INIT MISSING CONTEXT [TickObject] (ns) aid:22 eid:20 tid:11 peid:20 active:null context:null resource:[object Object]
+AFTER MISSING CONTEXT (ns) aid:20 eid:20 tid:11 peid:20 active:null context:undefined resource:undefined
+BEFORE MISSING CONTEXT (ns) aid:21 eid:21 tid:19 peid:21 active:null context:undefined resource:undefined
+AFTER MISSING CONTEXT (ns) aid:21 eid:21 tid:19 peid:21 active:null context:undefined resource:undefined
+BEFORE MISSING CONTEXT (ns) aid:22 eid:22 tid:20 peid:22 active:null context:undefined resource:undefined
+  INIT MISSING CONTEXT [SHUTDOWNWRAP] (ns) aid:23 eid:22 tid:20 peid:22 active:null context:null resource:[object ShutdownWrap]
+AFTER MISSING CONTEXT (ns) aid:22 eid:22 tid:20 peid:22 active:null context:undefined resource:undefined
+DESTROY (ns) aid:18 eid:0 tid:0 peid:0 active:null context:undefined resource:undefined
+DESTROY (ns) aid:19 eid:0 tid:0 peid:0 active:null context:undefined resource:undefined
+DESTROY (ns) aid:20 eid:0 tid:0 peid:0 active:null context:undefined resource:undefined
+DESTROY (ns) aid:21 eid:0 tid:0 peid:0 active:null context:undefined resource:undefined
+DESTROY (ns) aid:22 eid:0 tid:0 peid:0 active:null context:undefined resource:undefined
+BEFORE MISSING CONTEXT (ns) aid:23 eid:0 tid:0 peid:0 active:null context:undefined resource:undefined
+  INIT MISSING CONTEXT [TickObject] (ns) aid:24 eid:23 tid:11 peid:23 active:null context:null resource:[object Object]
+AFTER MISSING CONTEXT (ns) aid:23 eid:0 tid:0 peid:0 active:null context:undefined resource:undefined
+BEFORE MISSING CONTEXT (ns) aid:24 eid:24 tid:23 peid:24 active:null context:undefined resource:undefined
+AFTER MISSING CONTEXT (ns) aid:24 eid:24 tid:23 peid:24 active:null context:undefined resource:undefined
+BEFORE MISSING CONTEXT (ns) aid:4 eid:0 tid:0 peid:0 active:null context:undefined resource:undefined
+  BEFORE MISSING CONTEXT (ns) aid:8 eid:4 tid:1 peid:4 active:null context:undefined resource:undefined
+    INIT MISSING CONTEXT [TickObject] (ns) aid:25 eid:8 tid:7 peid:8 active:null context:null resource:[object Object]
+  AFTER MISSING CONTEXT (ns) aid:8 eid:4 tid:1 peid:4 active:null context:undefined resource:undefined
+  BEFORE MISSING CONTEXT (ns) aid:8 eid:4 tid:1 peid:4 active:null context:undefined resource:undefined
+  AFTER MISSING CONTEXT (ns) aid:8 eid:4 tid:1 peid:4 active:null context:undefined resource:undefined
+  BEFORE MISSING CONTEXT (ns) aid:8 eid:4 tid:1 peid:4 active:null context:undefined resource:undefined
+    INIT MISSING CONTEXT [TickObject] (ns) aid:26 eid:8 tid:7 peid:8 active:null context:null resource:[object Object]
+  AFTER MISSING CONTEXT (ns) aid:8 eid:4 tid:1 peid:4 active:null context:undefined resource:undefined
+  INIT MISSING CONTEXT [TickObject] (ns) aid:27 eid:4 tid:1 peid:4 active:null context:null resource:[object Object]
+AFTER MISSING CONTEXT (ns) aid:4 eid:0 tid:0 peid:0 active:null context:undefined resource:undefined
+BEFORE MISSING CONTEXT (ns) aid:25 eid:25 tid:8 peid:25 active:null context:undefined resource:undefined
+  INIT MISSING CONTEXT [TickObject] (ns) aid:28 eid:25 tid:8 peid:25 active:null context:null resource:[object Object]
+Client: Response Data: responseChunk:undefined
+
+  INIT MISSING CONTEXT [TickObject] (ns) aid:29 eid:25 tid:8 peid:25 active:null context:null resource:[object Object]
+  INIT MISSING CONTEXT [TickObject] (ns) aid:30 eid:25 tid:8 peid:25 active:null context:null resource:[object Object]
+AFTER MISSING CONTEXT (ns) aid:25 eid:25 tid:8 peid:25 active:null context:undefined resource:undefined
+BEFORE MISSING CONTEXT (ns) aid:26 eid:26 tid:8 peid:26 active:null context:undefined resource:undefined
+  INIT MISSING CONTEXT [TickObject] (ns) aid:31 eid:26 tid:8 peid:26 active:null context:null resource:[object Object]
+AFTER MISSING CONTEXT (ns) aid:26 eid:26 tid:8 peid:26 active:null context:undefined resource:undefined
+BEFORE MISSING CONTEXT (ns) aid:27 eid:27 tid:4 peid:27 active:null context:undefined resource:undefined
+AFTER MISSING CONTEXT (ns) aid:27 eid:27 tid:4 peid:27 active:null context:undefined resource:undefined
+BEFORE MISSING CONTEXT (ns) aid:28 eid:28 tid:25 peid:28 active:null context:undefined resource:undefined
+  INIT MISSING CONTEXT [TickObject] (ns) aid:32 eid:28 tid:25 peid:28 active:null context:null resource:[object Object]
+  INIT MISSING CONTEXT [TickObject] (ns) aid:33 eid:28 tid:25 peid:28 active:null context:null resource:[object Object]
+assert.js:350
+    throw err;
+    ^
+
+AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:
+
+  assert(requestOnEnd === 1)
+
+    at IncomingMessage.OnClientConnectCB.res.on (c:\projects\Jeff-Lewis\cls-hooked\test\http-events36-post.self-test.js:44:5)
+    at IncomingMessage.emit (events.js:194:15)
+    at endReadableNT (_stream_readable.js:1103:12)
+    at process._tickCallback (internal/process/next_tick.js:63:19)

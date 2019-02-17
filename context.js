@@ -60,7 +60,7 @@ Namespace.prototype.set = function set(key, value){
 
   this.active[key] = value;
 
-  DEBUG_CLS_HOOKED && debug3(`CONTEXT-SET (${this.name}) KEY:${key}=${value}`, null, this);
+  DEBUG_CLS_HOOKED && debug3(`CONTEXT-SET (${this.name}) KEY:${key}=${value}`, null, this, this.active);
 
   return value;
 };
@@ -70,7 +70,7 @@ Namespace.prototype.get = function get(key){
     DEBUG_CLS_HOOKED && debug3(`CONTEXT-GETTING KEY NO ACTIVE NS: (${this.name}) KEY:${key}`, null, this);
     return void 0;
   }
-  DEBUG_CLS_HOOKED && debug3(`CONTEXT-GETTING KEY: (${this.name}) KEY:${key}`, null, this);
+  DEBUG_CLS_HOOKED && debug3(`CONTEXT-GETTING KEY: (${this.name}) KEY:${key}`, null, this, this.active);
   return this.active[key];
 };
 
@@ -78,9 +78,10 @@ Namespace.prototype.createContext = function createContext(){
   // Prototype inherit existing context if created a new child context within existing context.
   let context = Object.create(this.active ? this.active : Object.prototype);
   context._ns_name = this.name;
-  context.id = _currentExecutionId;
+  //context.id = _currentExecutionId;
+  context.id = getExecutionAsyncId();
 
-  DEBUG_CLS_HOOKED && debug3(`CONTEXT-CREATED Context: (${this.name})`, null, this);
+  DEBUG_CLS_HOOKED && debug3(`CONTEXT-CREATED Context: (${this.name})`, null, this, context);
   return context;
 };
 
@@ -125,23 +126,17 @@ Namespace.prototype.runPromise = function runPromise(fn){
     throw new Error('fn must return a promise.');
   }
 
-  if(DEBUG_CLS_HOOKED){
-    debug2('CONTEXT-runPromise BEFORE: (' + this.name + ') currentExecutionId:' + _currentExecutionId + ' len:' + this._set.length + ' ' + util.inspect(context));
-  }
+  DEBUG_CLS_HOOKED && debug3(`CONTEXT-runPromise BEFORE: (' + this.name + ')`, null, this, context);
 
   return promise
   .then(result => {
-    if(DEBUG_CLS_HOOKED){
-      debug2('CONTEXT-runPromise AFTER then: (' + this.name + ') currentExecutionId:' + _currentExecutionId + ' len:' + this._set.length + ' ' + util.inspect(context));
-    }
+    DEBUG_CLS_HOOKED && debug3(`CONTEXT-runPromise AFTER then: (' + this.name + ')`, null, this, context);
     this.exit(context);
     return result;
   })
   .catch(err => {
     err[ERROR_SYMBOL] = context;
-    if(DEBUG_CLS_HOOKED){
-      debug2('CONTEXT-runPromise AFTER catch: (' + this.name + ') currentExecutionId:' + _currentExecutionId + ' len:' + this._set.length + ' ' + util.inspect(context));
-    }
+    DEBUG_CLS_HOOKED && debug3(`CONTEXT-runPromise AFTER catch: (' + this.name + ')`, null, this, context);
     this.exit(context);
     throw err;
   });
@@ -296,14 +291,19 @@ function createNamespace(name){
       if(namespace.active){
         namespace._contexts.set(asyncId, namespace.active);
         DEBUG_CLS_HOOKED && debug3(`INIT [${type}] (${name})`, asyncId, namespace, null, resource);
-      }else if(executionAsyncId === 0){
-        // CurrentId will be 0 when triggered from C++. Promise events
-        // https://github.com/nodejs/node/blob/master/doc/api/async_hooks.md#triggerid
-        const triggerId = async_hooks.triggerAsyncId();
+      }else {
         const triggerIdContext = namespace._contexts.get(triggerId);
         if(triggerIdContext){
           namespace._contexts.set(asyncId, triggerIdContext);
           DEBUG_CLS_HOOKED && debug3(`INIT USING CONTEXT FROM TRIGGER_ID [${type}] (${name})`, asyncId, namespace, null, resource);
+        }
+
+        let executionIdContext;
+        // CurrentId will be 0 when triggered from C++. Promise events
+        // https://github.com/nodejs/node/blob/master/doc/api/async_hooks.md#triggerid
+        if(executionAsyncId !== 0 && (executionIdContext = namespace._contexts.get(executionAsyncId))){
+          namespace._contexts.set(asyncId, executionIdContext);
+          DEBUG_CLS_HOOKED && debug3(`INIT USING CONTEXT FROM EXECUTION_ID [${type}] (${name})`, asyncId, namespace, null, resource);
         }else{
           const previousExecutionContext = namespace._contexts.get(_previousExecutionId);
           if(previousExecutionContext){
@@ -358,14 +358,12 @@ function createNamespace(name){
       //HACK to work with promises until they are fixed in node > 8.1.1
       context = namespace._contexts.get(asyncId) || namespace._contexts.get(executionAsyncId);
 
+      namespace._indent += 2;
       if(context){
         DEBUG_CLS_HOOKED && debug3(`PROMISERESOLVE (${name})`, asyncId, namespace, context);
-        namespace._indent += 2;
         namespace.enter(context);
-
       }else{
         DEBUG_CLS_HOOKED && debug3(`PROMISERESOLVE MISSING CONTEXT (${name})`, asyncId, namespace, context);
-        namespace._indent += 2;
       }
     },
     after(asyncId){
@@ -386,7 +384,6 @@ function createNamespace(name){
       context = namespace._contexts.get(asyncId) || namespace._contexts.get(executionAsyncId);
 
       namespace._indent -= 2;
-
       if(context){
         DEBUG_CLS_HOOKED && debug3(`AFTER (${name})`, asyncId, namespace, context);
         namespace.exit(context);
@@ -396,7 +393,7 @@ function createNamespace(name){
     },
     destroy(asyncId){
       getExecutionAsyncId();
-      DEBUG_CLS_HOOKED && debug3(`DESTROY (${name})`, asyncId, namespace, context);
+      DEBUG_CLS_HOOKED && debug3(`DESTROY (${name})`, asyncId, namespace);
       namespace._contexts.delete(asyncId);
     }
   });
@@ -441,6 +438,9 @@ function debug3(msg, asyncId, namespace, context, resource){
     const executionAsyncId = getExecutionAsyncId();
     const triggerId = async_hooks.triggerAsyncId();
     const indentStr = ' '.repeat(namespace._indent < 0 ? 0 : namespace._indent);
-    process._rawDebug(`${indentStr}${msg} ceid:${_currentExecutionId} peid:${_previousExecutionId} aid:${asyncId} eid:${executionAsyncId} tid:${triggerId} active:${util.inspect(namespace.active, {showHidden: false, depth: 2, colors: true})} context:${util.inspect(context, {showHidden: false, depth: 2, colors: true})} resource:${resource}`);
+    if(_currentExecutionId !== executionAsyncId){
+      process._rawDebug(`${indentStr}${msg} ****** CEID IS DIFFERENT THAN EID ****** ceid:${_currentExecutionId} peid:${_previousExecutionId} aid:${asyncId} eid:${executionAsyncId} tid:${triggerId} active:${util.inspect(namespace.active, {showHidden: false, depth: 2, colors: false})} context:${util.inspect(context, {showHidden: false, depth: 2, colors: false})} resource:${resource}`);
+    }
+    process._rawDebug(`${indentStr}${msg} aid:${asyncId} eid:${executionAsyncId} tid:${triggerId} peid:${_previousExecutionId} active:${util.inspect(namespace.active, {showHidden: false, depth: 2, colors: false})} context:${util.inspect(context, {showHidden: false, depth: 2, colors: false})} resource:${resource}`);
   }
 }
