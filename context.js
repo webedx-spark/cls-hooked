@@ -85,6 +85,11 @@ Namespace.prototype.createContext = function createContext(){
   return context;
 };
 
+/**
+ *
+ * @param fn
+ * @returns {any}
+ */
 Namespace.prototype.run = function run(fn){
   let context = this.createContext();
   this.enter(context);
@@ -266,28 +271,6 @@ function createNamespace(name){
     init(asyncId, type, triggerId, resource){
       const executionAsyncId = getExecutionAsyncId();
 
-      //CHAIN Parent's Context onto child if none exists. This is needed to pass net-events.spec
-      // let initContext = namespace.active;
-      // if(!initContext && triggerId) {
-      //   let parentContext = namespace._contexts.get(triggerId);
-      //   if (parentContext) {
-      //     namespace.active = parentContext;
-      //     namespace._contexts.set(currentExecutionId, parentContext);
-      //     if (DEBUG_CLS_HOOKED) {
-      //       const indentStr = ' '.repeat(namespace._indent < 0 ? 0 : namespace._indent);
-      //       debug2(`${indentStr}INIT [${type}] (${name}) WITH PARENT CONTEXT asyncId:${asyncId} currentExecutionId:${currentExecutionId} triggerId:${triggerId} active:${util.inspect(namespace.active, true)} resource:${resource}`);
-      //     }
-      //   } else if (DEBUG_CLS_HOOKED) {
-      //       const indentStr = ' '.repeat(namespace._indent < 0 ? 0 : namespace._indent);
-      //       debug2(`${indentStr}INIT [${type}] (${name}) MISSING CONTEXT asyncId:${asyncId} currentExecutionId:${currentExecutionId} triggerId:${triggerId} active:${util.inspect(namespace.active, true)} resource:${resource}`);
-      //     }
-      // }else {
-      //   namespace._contexts.set(currentExecutionId, namespace.active);
-      //   if (DEBUG_CLS_HOOKED) {
-      //     const indentStr = ' '.repeat(namespace._indent < 0 ? 0 : namespace._indent);
-      //     debug2(`${indentStr}INIT [${type}] (${name}) asyncId:${asyncId} currentExecutionId:${currentExecutionId} triggerId:${triggerId} active:${util.inspect(namespace.active, true)} resource:${resource}`);
-      //   }
-      // }
       if(namespace.active){
         namespace._contexts.set(asyncId, namespace.active);
         DEBUG_CLS_HOOKED && debug3(`INIT [${type}] (${name})`, asyncId, namespace, null, resource);
