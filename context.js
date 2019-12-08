@@ -5,11 +5,17 @@ const util = require('util');
 const assert = require('assert');
 const wrapEmitter = require('emitter-listener');
 const async_hooks = require('async_hooks');
+const semver = require('semver');
 
 const CONTEXTS_SYMBOL = 'cls@contexts';
 const ERROR_SYMBOL = 'error@context';
 
 const DEBUG_CLS_HOOKED = process.env.DEBUG_CLS_HOOKED;
+/**
+ * executionAsyncId was added in node ~v8.2.0.
+ * @type {function(): *}
+ */
+const getCurrentUid = semver.gte(process.versions.node, '8.2.0') ? async_hooks.executionAsyncId : () => async_hooks.currentId;
 
 let currentUid = -1;
 
@@ -49,7 +55,7 @@ Namespace.prototype.set = function set(key, value) {
 Namespace.prototype.get = function get(key) {
   if (!this.active) {
     if (DEBUG_CLS_HOOKED) {
-      const asyncHooksCurrentId = async_hooks.currentId();
+      const asyncHooksCurrentId = getCurrentUid();
       const triggerId = async_hooks.triggerAsyncId();
       const indentStr = ' '.repeat(this._indent < 0 ? 0 : this._indent);
       //debug2(indentStr + 'CONTEXT-GETTING KEY NO ACTIVE NS:' + key + '=undefined' + ' (' + this.name + ') currentUid:' + currentUid + ' active:' + util.inspect(this.active, {showHidden:true, depth:2, colors:true}));
@@ -58,7 +64,7 @@ Namespace.prototype.get = function get(key) {
     return undefined;
   }
   if (DEBUG_CLS_HOOKED) {
-    const asyncHooksCurrentId = async_hooks.executionAsyncId();
+    const asyncHooksCurrentId = getCurrentUid();
     const triggerId = async_hooks.triggerAsyncId();
     const indentStr = ' '.repeat(this._indent < 0 ? 0 : this._indent);
     debug2(indentStr + 'CONTEXT-GETTING KEY:' + key + '=' + this.active[key] + ' (' + this.name + ') currentUid:' + currentUid + ' active:' + util.inspect(this.active, {showHidden:true, depth:2, colors:true}));
@@ -74,7 +80,7 @@ Namespace.prototype.createContext = function createContext() {
   context.id = currentUid;
 
   if (DEBUG_CLS_HOOKED) {
-    const asyncHooksCurrentId = async_hooks.executionAsyncId();
+    const asyncHooksCurrentId = getCurrentUid();
     const triggerId = async_hooks.triggerAsyncId();
     const indentStr = ' '.repeat(this._indent < 0 ? 0 : this._indent);
     debug2(`${indentStr}CONTEXT-CREATED Context: (${this.name}) currentUid:${currentUid} asyncHooksCurrentId:${asyncHooksCurrentId} triggerId:${triggerId} len:${this._set.length} context:${util.inspect(context, {showHidden:true, depth:2, colors:true})}`);
@@ -90,7 +96,7 @@ Namespace.prototype.run = function run(fn) {
   try {
     if (DEBUG_CLS_HOOKED) {
       const triggerId = async_hooks.triggerAsyncId();
-      const asyncHooksCurrentId = async_hooks.executionAsyncId();
+      const asyncHooksCurrentId = getCurrentUid();
       const indentStr = ' '.repeat(this._indent < 0 ? 0 : this._indent);
       debug2(`${indentStr}CONTEXT-RUN BEGIN: (${this.name}) currentUid:${currentUid} triggerId:${triggerId} asyncHooksCurrentId:${asyncHooksCurrentId} len:${this._set.length} context:${util.inspect(context)}`);
     }
@@ -104,7 +110,7 @@ Namespace.prototype.run = function run(fn) {
   } finally {
     if (DEBUG_CLS_HOOKED) {
       const triggerId = async_hooks.triggerAsyncId();
-      const asyncHooksCurrentId = async_hooks.executionAsyncId();
+      const asyncHooksCurrentId = getCurrentUid();
       const indentStr = ' '.repeat(this._indent < 0 ? 0 : this._indent);
       debug2(`${indentStr}CONTEXT-RUN END: (${this.name}) currentUid:${currentUid} triggerId:${triggerId} asyncHooksCurrentId:${asyncHooksCurrentId} len:${this._set.length} ${util.inspect(context)}`);
     }
@@ -184,7 +190,7 @@ Namespace.prototype.bind = function bindFactory(fn, context) {
 Namespace.prototype.enter = function enter(context) {
   assert.ok(context, 'context must be provided for entering');
   if (DEBUG_CLS_HOOKED) {
-    const asyncHooksCurrentId = async_hooks.executionAsyncId();
+    const asyncHooksCurrentId = getCurrentUid();
     const triggerId = async_hooks.triggerAsyncId();
     const indentStr = ' '.repeat(this._indent < 0 ? 0 : this._indent);
     debug2(`${indentStr}CONTEXT-ENTER: (${this.name}) currentUid:${currentUid} triggerId:${triggerId} asyncHooksCurrentId:${asyncHooksCurrentId} len:${this._set.length} ${util.inspect(context)}`);
@@ -197,7 +203,7 @@ Namespace.prototype.enter = function enter(context) {
 Namespace.prototype.exit = function exit(context) {
   assert.ok(context, 'context must be provided for exiting');
   if (DEBUG_CLS_HOOKED) {
-    const asyncHooksCurrentId = async_hooks.executionAsyncId();
+    const asyncHooksCurrentId = getCurrentUid();
     const triggerId = async_hooks.triggerAsyncId();
     const indentStr = ' '.repeat(this._indent < 0 ? 0 : this._indent);
     debug2(`${indentStr}CONTEXT-EXIT: (${this.name}) currentUid:${currentUid} triggerId:${triggerId} asyncHooksCurrentId:${asyncHooksCurrentId} len:${this._set.length} ${util.inspect(context)}`);
@@ -288,7 +294,7 @@ function createNamespace(name) {
 
   const hook = async_hooks.createHook({
     init(asyncId, type, triggerId, resource) {
-      currentUid = async_hooks.executionAsyncId();
+      currentUid = getCurrentUid();
 
       //CHAIN Parent's Context onto child if none exists. This is needed to pass net-events.spec
       // let initContext = namespace.active;
@@ -346,7 +352,8 @@ function createNamespace(name) {
 
     },
     before(asyncId) {
-      currentUid = async_hooks.executionAsyncId();
+      currentUid = getCurrentUid();
+
       let context;
 
       /*
@@ -381,7 +388,8 @@ function createNamespace(name) {
       }
     },
     after(asyncId) {
-      currentUid = async_hooks.executionAsyncId();
+      currentUid = getCurrentUid();
+
       let context; // = namespace._contexts.get(currentUid);
       /*
       if(currentUid === 0){
@@ -414,7 +422,8 @@ function createNamespace(name) {
       }
     },
     destroy(asyncId) {
-      currentUid = async_hooks.executionAsyncId();
+      currentUid = getCurrentUid();
+
       if (DEBUG_CLS_HOOKED) {
         const triggerId = async_hooks.triggerAsyncId();
         const indentStr = ' '.repeat(namespace._indent < 0 ? 0 : namespace._indent);
@@ -473,5 +482,3 @@ function debug2(...args) {
     return fn.constructor.name;
   }
 }*/
-
-
