@@ -1,6 +1,6 @@
 {
-  "name": "cls-hooked",
-  "version": "4.3.0",
+  "name": "@coursera/cls-hooked",
+  "version": "4.3.1",
   "description": "CLS using AsyncWrap instead of async-listener - Node >= 4.7.0",
   "main": "index.js",
   "files": [
